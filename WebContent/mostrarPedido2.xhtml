@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+  
+<h:head>
+  	<h:outputStylesheet library="css" name="bootstrap.min.css" />     
+    <title>""</title>
+    <style type="text/css">
+        .tableUpdated {
+            width: 90% !important;
+            margin: 17px 58px 0 !important;
+        }
+        .btnSpace {
+            margin: 17px;
+        }     
+    </style>
+</h:head>
+
+<h:head>
+
+<style type="text/css">
+	.ui-row-editor .ui-row-editor-pencil {
+		margin-left:8px;
+	}
+</style>
+</h:head>
+
+<h:body>
+
+    <h:form id="pedidosForm">
+
+    <p:growl id="msgs" showDetail="true" showSummary="false"/>
+ 
+    <center><h2><h:outputText value="Listado de Pedidos"/></h2></center>
+        
+        
+        <p:dataTable id="pedidosTable" value="#{pedidoB.allLista}" var="po" editable="true" editMode="row" rowKey="#{po.id}">
+       
+        <f:facet name="header">  
+  	    	Listado de Pedidos
+    	</f:facet>  
+       	<p:ajax event="rowEdit" listener="#{pedidoB.onRowEdit}" update=":pedidosForm:pedidosTable :pedidosForm:msgs" process=":pedidosForm:pedidosTable :pedidosForm:msgs"/>
+   		
+             <p:column headerText="Pedido ID" filterBy="#{po.id}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{po.id}"/></f:facet>  
+		            <f:facet name="input"><p:inputText id="idInput" value="#{po.id}" style="width:96%"/></f:facet>
+		        </p:cellEditor>  
+		    </p:column>  
+
+    	     <p:column headerText="Comentario">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{po.pedreccomentario}"/></f:facet>  
+		            <f:facet name="input"><p:inputText id="comentarioInput" value="#{po.pedreccomentario}" style="width:96%"/></f:facet>  
+		        </p:cellEditor>  
+		    </p:column>  
+
+
+ 			<p:column headerText="Ped.Fec.Estimada">      
+		        <p:cellEditor>  
+		            <f:facet name="output">  
+		                <h:outputText value="#{po.pedfecestim}"/>  
+		            </f:facet>  
+		            <f:facet name="input">  
+						<p:calendar id="pedfecestimInput" value="#{po.pedfecestim}"  />
+		            </f:facet>  
+		        </p:cellEditor>  
+		    </p:column>  
+	 
+    	     <p:column headerText="Ped.Fecha">      
+		        <p:cellEditor>  
+		            <f:facet name="output">  
+		                <h:outputText value="#{po.fecha}"/>  
+		            </f:facet>  
+		            <f:facet name="input">  
+		                <p:calendar id="fechaInput" value="#{po.fecha}" />
+		            </f:facet>  
+		        </p:cellEditor>  
+		    </p:column>  
+      
+    	     <p:column headerText="Rec.Codigo">      
+		        <p:cellEditor>  
+		            <f:facet name="output">  
+		                <h:outputText value="#{po.pedreccodigo}"/>  
+		            </f:facet>  
+		            <f:facet name="input">  
+		                <p:inputText id="reccodigo" value="#{po.pedreccodigo}" style="width:96%"/>  
+		            </f:facet>  
+		        </p:cellEditor>  
+		    </p:column>  
+
+    	     <p:column headerText="Ped.Rec.Fecha">      
+		        <p:cellEditor>  
+		            <f:facet name="output">  
+		                <h:outputText value="#{po.pedrecfecha}"/>  
+		            </f:facet>  
+		            <f:facet name="input">  
+			            <p:calendar id="pedrecfechaInput" value="#{po.pedrecfecha}" />
+	
+		            <!--    <p:inputText id="pedrecfechaInput" value="#{p.pedrecfecha}" style="width:96%"/> -->  
+		            </f:facet>  
+		        </p:cellEditor>  
+		    </p:column>  
+
+    	     <p:column headerText="Ped.Estado">      
+		        <p:cellEditor>  
+		            <f:facet name="output">  
+		                <h:outputText value="#{po.pedestado}"/>  
+		            </f:facet>  
+		            <f:facet name="input"> 
+		            
+		            	<p:selectOneMenu id="pedestado" value="#{po.pedestado}" required="true" > 
+							<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+ 							<f:selectItems value="#{pedidoB.tiposDePedEstado}"/> 
+						</p:selectOneMenu>
+		             
+		                <!-- <p:inputText id="pedestadoInput" value="#{p.pedestado}" style="width:96%"/> -->  
+		            </f:facet>  
+		        </p:cellEditor>  
+		    </p:column>  
+
+
+            <p:column headerText="Acción">
+                <f:facet name="Accion"></f:facet>
+              		<p:commandButton value="Eliminar" action="#{pedidoB.deleteClase(po)}"  />
+            </p:column>
+   
+		<p:column headerText="Edit" style="width:6%">  
+                        <p:rowEditor rendered="true" />  
+                    </p:column>   		
+   		
+        </p:dataTable>
+    
+
+        
+        <p:contextMenu for="pedidosTable" widgetVar="cMenu">
+        	<p:menuitem value="Editar Celda" onclick="PF('cellPed').showCellEditor();return false;"/>
+        
+        </p:contextMenu>
+        
+            <h:commandButton action="altaPedido.xhtml?faces-redirect=true" value="Agregar Pedido" class="btn btn-success btnSpace" />
+   			
+   
+     </h:form>
+
+</h:body>
+</html>
+

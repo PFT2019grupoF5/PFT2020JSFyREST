@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://java.sun.com/jsf/html"> 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid columns="3">
+			Tipo Perfil:
+			<p:selectOneMenu id="tipoPerfil" value="#{perfilB.tipoPerfil}" required="true" > 
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+ 				<f:selectItems value="#{perfilB.tiposDePerfil}"/> 
+			</p:selectOneMenu>			
+		</h:panelGrid>
+		<h:commandButton value="Enviar" action="#{perfilB.add(perfilB.tipoPerfil)}" />
+	</h:form>
+
+</body> 
+</html>

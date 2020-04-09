@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://java.sun.com/jsf/html"
+      xmlns:pe="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid>
+			Fecha Estimada Pedido:
+			<pe:calendar value="#{pedidoB.pedfecestim}" />
+			
+ 			Fecha de Pedido:
+			<pe:calendar value="#{pedidoB.fecha}" />
+			 
+			Recibo Codigo Pedido:
+			<pe:inputText id="pedreccodigo" value="#{pedidoB.pedreccodigo}" required="true" />
+			<pe:message for="pedreccodigo" style="color:red" />
+					
+			Recibo Fecha Pedido:
+			<pe:calendar value="#{pedidoB.pedrecfecha}"/>
+
+			Recibo Comentario Pedido:
+			<pe:inputText id="pedreccomentario" value="#{pedidoB.pedreccomentario}" required="true" size="250"/>
+			<pe:message for="pedreccomentario" style="color:red" />
+					
+			Estado de Pedido:
+			<pe:selectOneMenu id="pedestado" value="#{pedidoB.pedestado}" required="true" > 
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+ 				<f:selectItems value="#{pedidoB.tiposDePedEstado}"/> 
+			</pe:selectOneMenu>
+			
+			Usuario:
+			<pe:selectOneMenu value="#{usuarioB.id}">
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+ 				<f:selectItems var="c" value="#{usuarioB.valoresList}" itemLabel="#{c.valorLabel}" itemValue="${c.valorValue}" />
+			</pe:selectOneMenu>
+			
+		</h:panelGrid>
+					
+		<h:commandButton value="Grabar" action="#{pedidoB.addxID(pedidoB.pedfecestim, pedidoB.fecha, pedidoB.pedreccodigo, pedidoB.pedrecfecha, pedidoB.pedreccomentario, pedidoB.pedestado, usuarioB.id)}"/>
+		<h:commandButton action="mostrarPedido2.xhtml?faces-redirect=true" value="Eliminar Pedido" class="btn btn-success btnSpace" />
+ 			
+	</h:form>
+
+</body> 
+</html>

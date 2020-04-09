@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jstl/core"> 
+
+<h:head></h:head> 
+<body> 
+		<h:form id="bmAlmacenamiento">
+		<h1>Baja y Modificación de Almacenamientos</h1>
+			
+				Seleccione Almacenamiento:
+				<p:selectOneMenu id="almacenamiento" value="#{almacenamientoB.id}" required="true" >
+	 				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+	 				<f:selectItems var="a" value="#{almacenamientoB.valoresList}" itemLabel="#{a.valorLabel}" itemValue="${a.valorValue}" />
+	 			</p:selectOneMenu>
+		
+			<h:panelGrid columns="3">
+					Nombre:
+										
+					<h:inputText id="nombre" value="#{almacenamientoB.nombre}" required="true" label="Nombre" />
+					<h:message for="nombre" style="color:red" />
+					Volumen:
+					<h:inputText id="volumen" value="#{almacenamientoB.volumen}" required="true" label="Volumen" />
+					<h:message for="volumen" style="color:red" />
+					Costo Operativo:
+					<h:inputText id="costoop" value="#{almacenamientoB.costoop}" required="true" label="CostoOp" />
+					<h:message for="costoop" style="color:red" />
+					Capacidad de Estiba:
+					<h:inputText id="capestiba" value="#{almacenamientoB.capestiba}" required="true" label="CapEstiba" />
+					<h:message for="capestiba" style="color:red" />
+					Capacidad de Peso:
+					<h:inputText id="cappeso" value="#{almacenamientoB.cappeso}" required="true" label="CapPeso" />
+					<h:message for="cappeso" style="color:red" />
+					 
+					Local:
+					<p:selectOneMenu id="local" value="#{almacenamientoB.entidadLoc.id}" required="true" >
+		 				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+		 				<f:selectItems var="a" value="#{localB.valoresList}" itemLabel="#{a.valorLabel}" itemValue="${a.valorValue}" />
+		 			</p:selectOneMenu>
+		      	
+			
+			</h:panelGrid>
+			<h:commandButton value="Baja" action="#{almacenamientoB.delete(almacenamientoB.id)}" />
+		</h:form>
+</body> 
+</html>

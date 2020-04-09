@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://java.sun.com/jsf/html"> 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid>
+
+			Nombre:
+			<h:inputText id="nombre" value="#{usuarioB.nombre}" required="true" size="50"/>
+			<h:message for="Nombre" style="color:red" />
+					
+			Apellido:
+			<h:inputText id="apellido" value="#{usuarioB.apellido}" required="true" size="50"/>
+			<h:message for="Apellido" style="color:red" />
+
+			NomAcceso:
+			<h:inputText id="nomAcceso" value="#{usuarioB.nomAcceso}" required="true" size="50"/>
+			<h:message for="NomAcceso" style="color:red" />
+					
+			Contrasena:
+			<h:inputText id="contrasena" value="#{usuarioB.contrasena}" required="true" size="50"/>
+			<h:message for="Contrasena" style="color:red" />
+					
+			Correo:
+			<h:inputText id="correo" value="#{usuarioB.correo}" required="true" size="50"/>
+			<h:message for="Correo" style="color:red" />
+								
+			Perfil:
+			<h:selectOneMenu value="#{usuarioB.nombrePerfil}">
+				<f:selectItems value="#{usuarioB.perfiles}" var="perfil" itemLabel="#{perfil.perfil}" itemValue="#{perfil.perfil}" />
+			</h:selectOneMenu>
+
+
+		</h:panelGrid>
+					
+		<h:commandButton value="Enviar" action="#{usuarioB.add(usuarioB.nombre, usuarioB.apellido, usuarioB.nomAcceso, usuarioB.contrasena, usuarioB.correo, usuarioB.nombrePerfil)}"/>
+					
+	</h:form>
+
+</body> 
+</html>

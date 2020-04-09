@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid columns="3">
+
+			Nombre:
+			<h:inputText id="nombre" value="#{familiaB.nombre}" required="true"
+				label="Nombre" />
+			<h:message for="nombre" style="color:red" />
+
+			Descrip:
+			<h:inputText id="descrip" value="#{familiaB.descrip}" required="true"
+				label="Descrip" />
+			<h:message for="descrip" style="color:red" />
+
+			Incompat:
+			<h:inputText id="incompat" value="#{familiaB.incompat}" required="true"
+				label="Incompat" />
+			<h:message for="incompat" style="color:red" />
+
+		</h:panelGrid>
+		<h:commandButton value="Enviar" action="#{familiaB.add(familiaB.nombre, familiaB.descrip, familiaB.incompat)}" />
+	</h:form>
+
+</body> 
+</html>

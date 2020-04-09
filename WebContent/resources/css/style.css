@@ -1,0 +1,17 @@
+body{
+    min-height: 100vh;
+    position: relative;
+}
+
+#content{
+    min-height: calc(100vh - 75px);
+}
+
+table tr th{
+	font-weight:700;
+}
+
+.navbar{
+	background-color:red!important;
+}
+/*aca agrega tus estilos*/

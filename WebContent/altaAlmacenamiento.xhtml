@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://java.sun.com/jsf/html"
+      xmlns:pe="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid>
+				Nombre:
+				<pe:inputText id="nombre" value="#{almacenamientoB.nombre}" required="true" size="50"/>
+				<pe:message for="nombre" style="color:red" />
+	
+				Volumen:
+					<pe:inputText type="number" id="volumen" value="#{almacenamientoB.volumen}" required="true" label="Volumen" decimalPlaces="2" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+					<pe:message for="volumen" style="color:red" />
+						
+				Costo Operativo:
+					<pe:inputText id="costoop" value="#{almacenamientoB.costoop}" required="true" decimalPlaces="2"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+					<pe:message for="costoop" style="color:red" />
+						
+				Capacidad Estiba:
+					<pe:inputText id="capestiba" value="#{almacenamientoB.capestiba}" required="true" decimalPlaces="2"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+					<pe:message for="capestiba" style="color:red" />
+	
+				Capacidad Peso:
+					<pe:inputText id="cappeso" value="#{almacenamientoB.cappeso}" required="true" decimalPlaces="2"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+					<pe:message for="cappeso" style="color:red" />
+				
+				Localidad:
+				<h:selectOneMenu value="#{almacenamientoB.nombreEntidadLoc}">
+					<f:selectItems value="#{almacenamientoB.listaEntLoc}" var="entidadLoc" itemLabel="#{entidadLoc.nombre}" itemValue="#{entidadLoc.nombre}" />
+				</h:selectOneMenu>
+
+				
+		</h:panelGrid>
+		<h:commandButton value="Guardar" action="#{almacenamientoB.add(almacenamientoB.volumen, almacenamientoB.nombre, almacenamientoB.costoop, almacenamientoB.capestiba, almacenamientoB.cappeso, almacenamientoB.nombreEntidadLoc)}"/>
+					
+	</h:form>
+
+</body> 
+</html>
+

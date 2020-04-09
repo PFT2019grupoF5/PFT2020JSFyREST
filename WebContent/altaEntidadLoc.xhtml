@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://java.sun.com/jsf/html"
+      xmlns:h="http://java.sun.com/jsf/html"
+xmlns:pe="http://primefaces.org/ui" 
+> 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid>
+			Codigo:
+			<pe:inputNumber id="codigo" value="#{entidadLocB.codigo}" required="true" decimalPlaces="0"/>
+			<pe:message for="codigo" style="color:red" />
+			 
+			Nombre:
+			<pe:inputText id="nombre" value="#{entidadLocB.nombre}" required="true" size="50"/>
+			<pe:message for="nombre" style="color:red" />
+					
+			Direccion:
+			<pe:inputText id="direccion" value="#{entidadLocB.direccion}" required="true" size="50"/>
+			<pe:message for="direccion" style="color:red" />
+					
+			Tipo Local:
+			<pe:selectOneMenu id="tipoloc" value="#{entidadLocB.tipoloc}" required="true" > 
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+ 				<f:selectItems value="#{entidadLocB.tiposDeLocal}"/> 
+			</pe:selectOneMenu>
+			
+			Ciudad:
+			<pe:selectOneMenu value="#{entidadLocB.nombreCiudad}">
+				<f:selectItems value="#{entidadLocB.ciudades}" var="ciudad" itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.nombre}" />
+			</pe:selectOneMenu>
+
+
+		</h:panelGrid>
+					
+		<h:commandButton value="Enviar" action="#{entidadLocB.add(entidadLocB.codigo, entidadLocB.nombre, entidadLocB.direccion, entidadLocB.tipoloc, entidadLocB.nombreCiudad)}"/>
+					
+	</h:form>
+
+</body> 
+</html>

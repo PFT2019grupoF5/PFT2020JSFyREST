@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<script name="jquery/jquery.js" library="primefaces"></script>
+</h:head>
+
+<h:form style="width:400px;">
+
+	
+	<ui:composition template="/general/template.xhtml">
+	 <ui:define name="content">
+	   <div style="width:600px;" class="mx-auto">
+       <h2>Log in:</h2>
+			<h:form id="loginForm">
+			    <h:panelGrid columns="3">
+			      Usuario:
+			      <h:inputText id="usuario" value="#{usuarioB.nomAcceso}" required="true" label="usuario" styleClass="form-control"/>
+			      <h:message for="usuario" styleClass="text-danger"/>
+			      Contraseña:
+			      <h:inputSecret id="contraseña" value="#{usuarioB.contrasena}" required="true" label="contraseña" styleClass="form-control"/>
+			      <h:message for="contraseña" styleClass="text-danger"/>
+			    </h:panelGrid>
+	  	
+	  	
+	  	
+			  	<p:growl id="message"></p:growl>
+				<p:menuButton value="menuButton" model="#{menuB.menuButton}">
+				</p:menuButton>
+			  	
+	  		</h:form>
+		</div>
+
+		
+	</ui:define>
+	</ui:composition>
+
+
+</h:form>
+
+
+		
+</html>

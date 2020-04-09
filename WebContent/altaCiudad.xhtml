@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pe="http://primefaces.org/ui" > 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid columns="3">
+			Nombre:
+			<pe:inputText id="nombre" value="#{ciudadB.nombre}" required="true"
+				label="Nombre" />
+			<pe:message for="nombre" style="color:red" />
+		</h:panelGrid>
+		<h:commandButton value="Enviar" action="#{ciudadB.add(ciudadB.nombre)}" />
+	</h:form>
+
+</body> 
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+
+<body> 
+	<h1>Ingrese datos</h1>
+	<h:form>
+
+		<h:panelGrid>
+			Nombre:
+			<p:inputText id="nombre" value="#{productoB.nombre}" required="true" size="50"/>
+			<p:message for="nombre" style="color:red" />
+			 
+			Lote:
+			<p:inputText id="lote" value="#{productoB.lote}" required="true" size="10"/>
+			<p:message for="lote" style="color:red" />
+			 
+			Precio:
+			<p:inputNumber id="precio" value="#{productoB.precio}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="precio" style="color:red" />
+					
+			Fecha de Elaborado:
+			<p:calendar value="#{productoB.felab}" />
+			
+			Fecha de Vencimiento:
+			<p:calendar value="#{productoB.fven}" />
+
+			Peso:
+			<p:inputNumber id="peso" value="#{productoB.peso}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="peso" style="color:red" />
+
+			Volumen:
+			<p:inputNumber id="volumen" value="#{productoB.volumen}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="volumen" style="color:red" />
+
+			Estiba:
+			<p:inputNumber id="estiba" value="#{productoB.estiba}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="estiba" style="color:red" />
+
+			Stock Mínimo:
+			<p:inputNumber id="stkMin" value="#{productoB.stkMin}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="stkMin" style="color:red" />
+
+			Stock Total:
+			<p:inputNumber id="stkTotal" value="#{productoB.stkTotal}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="stkTotal" style="color:red" />
+
+			Segmentable:
+			<p:selectOneMenu value="#{productoB.segmentac}" >
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+    			<f:selectItems value="#{segmentacionB.segmentaciones}" />
+			</p:selectOneMenu>
+			
+			Usuario:
+			<p:selectOneMenu id="usu" value="#{productoB.idUsuario}">
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+ 				<f:selectItems var="c" value="#{productoB.listaUsuario}" itemLabel="#{c.nombre}" itemValue="${c.id}" />
+			</p:selectOneMenu>
+
+			Familia:
+			<p:selectOneMenu  id="fam" value="#{productoB.idFamilia}">
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+ 				<f:selectItems var="c" value="#{productoB.listaFamilia}" itemLabel="#{c.nombre}" itemValue="${c.id}" />
+			</p:selectOneMenu>
+		</h:panelGrid>
+					
+		<h:commandButton value="Guardar" action="#{productoB.add(productoB.nombre, productoB.lote, productoB.precio, productoB.felab, productoB.fven, productoB.peso, productoB.volumen, productoB.estiba, productoB.stkMin, productoB.stkTotal, productoB.segmentac, productoB.idUsuario, productoB.idFamilia)}"/>
+					
+	</h:form>
+
+</body> 
+</html>

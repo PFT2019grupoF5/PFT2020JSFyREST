@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+<h:head></h:head> 
+<body> 
+
+	<h1>Datos ingresados</h1>
+
+	<h:panelGrid columns="1">
+		<h:outputLabel value="Ped Fecha Estimada: #{pedidoB.pedfecestim}" />
+		<h:outputLabel value="Fecha: #{pedidoB.fecha}" />
+		<h:outputLabel value="Ped Rec Codigo: #{pedidoB.pedreccodigo}" />
+		<h:outputLabel value="Ped Rec Fecha: #{pedidoB.pedrecfecha}" />
+		<h:outputLabel value="Ped Rec Comentario: #{pedidoB.pedreccomentario}" />
+		<h:outputLabel value="Ped Estado: #{pedidoB.pedestado}" />
+		<!--  <h:outputLabel value="Usuario nomAcceso: #{usuarioB.nomAcceso}" />-->
+	</h:panelGrid>
+
+</body> 
+</html>

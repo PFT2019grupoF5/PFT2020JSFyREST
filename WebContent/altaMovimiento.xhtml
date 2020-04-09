@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+
+<h:head></h:head> 
+
+<body> 
+
+	<h1>Ingrese datos</h1>
+	<h:form>
+		<h:panelGrid>
+			Fecha:
+			<p:calendar value="#{movimientoB.fecha}" />
+			
+			Cantidad:
+			<p:inputNumber id="cantidad" value="#{movimientoB.cantidad}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="cantidad" style="color:red" />
+					
+			Descripcion:
+			<p:inputText id="descripcion" value="#{movimientoB.descripcion}" required="true" size="50"/>
+			<p:message for="descripcion" style="color:red" />
+					
+			Costo:
+			<p:inputNumber id="costo" value="#{movimientoB.costo}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
+			<p:message for="costo" style="color:red" />
+			
+			Tipo Movimiento:
+			<p:selectOneMenu value="#{movimientoB.tipoMov}" >
+				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
+    			<f:selectItems value="#{tipomovimientoB.tipoMovimiento}" />
+			</p:selectOneMenu>
+			
+			 
+			Producto:
+			<p:selectOneMenu value="#{movimientoB.idProducto}">
+				<f:selectItems value="#{movimientoB.productos}" var="producto" itemLabel="#{producto.nombre}" itemValue="#{producto.id}" />
+			</p:selectOneMenu>
+
+			Almacenamiento:
+			<p:selectOneMenu value="#{movimientoB.idAlmacenamiento}">
+				<f:selectItems value="#{movimientoB.almacenamientos}" var="almacenamiento" itemLabel="#{almacenamiento.nombre}" itemValue="#{almacenamiento.id}" />
+			</p:selectOneMenu>
+
+		</h:panelGrid>
+					
+		<h:commandButton value="Grabar" action="#{movimientoB.addxID(movimientoB.fecha, movimientoB.cantidad, movimientoB.descripcion, movimientoB.costo, movimientoB.tipoMov, movimientoB.idProducto, movimientoB.idAlmacenamiento)}"/>
+					
+	</h:form>
+
+</body> 
+</html>

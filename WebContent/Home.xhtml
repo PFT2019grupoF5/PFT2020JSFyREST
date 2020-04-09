@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+	<h:head>
+	</h:head> 
+	<h:body>
+
+    <ui:composition template="/general/template.xhtml">
+      <ui:define name="content">
+          <style>
+				     body{
+				         background-image: url("#{resource['imagen/imagenAlm.JPG']}");
+				         background-size: cover;
+							   background-repeat: no-repeat; 
+							   background-attachment:fixed;
+				     }
+				  </style>
+          <h2 class="text-center text-white font-weight-bold">Bienvenido al Sistema de Gestión de Almacenes</h2>
+      </ui:define>
+     </ui:composition>
+  </h:body>
+</html>
