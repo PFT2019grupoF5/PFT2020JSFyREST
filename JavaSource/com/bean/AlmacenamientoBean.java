@@ -31,7 +31,7 @@ public class AlmacenamientoBean {
 	private double cappeso;
 	private EntidadLoc entidadLoc;
 
-	//20200121 Debe tener constructor x defecto cuando uso este tipo de dato con json de entrada en un método
+	//20200121 Debe tener constructor x defecto cuando uso este tipo de dato con json de entrada en un metodo
 	public AlmacenamientoBean() {
 	}
 

@@ -55,7 +55,9 @@ public class ProductosRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Producto addProducto(Producto producto) throws ServiciosException{
         try{
-            System.out.println("addProducto-nombre " + producto.getNombre() );    
+            System.out.println("addProducto-nombre " + producto.getNombre());    
+            System.out.println("addProducto-Felab  " + producto.getFelab().toString());    
+            System.out.println("addProducto-Fven   " + producto.getFven().toString());    
             productosBeans.addProducto(producto);
 			return producto;
         }catch(PersistenceException e){
