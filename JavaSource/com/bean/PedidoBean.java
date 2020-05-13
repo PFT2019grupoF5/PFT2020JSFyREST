@@ -1,13 +1,18 @@
 package com.bean;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.PersistenceException;
+
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.RowEditEvent;
 
 import com.beans.IPedidosRemote;
 import com.beans.IUsuariosRemote;
@@ -15,6 +20,8 @@ import com.entities.Pedido;
 import com.entities.Usuario;
 import com.enumerated.estadoPedido;
 import com.exception.ServiciosException;
+
+import javafx.scene.control.TableColumn.CellEditEvent;
 
 @ManagedBean(name="pedidoB")
 @SessionScoped
@@ -241,7 +248,7 @@ public class PedidoBean {
 	public void updateClase(Pedido p){
 		try{
             
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Se modific� el registro correctamente"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Se modifico el registro correctamente"));
 			
             pedidosEJBBean.updatePedido(p);
 		}catch(Exception e){
@@ -258,7 +265,7 @@ public class PedidoBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
    
 	}
-	
+/*	
 	public void onCellEdit(CellEditEvent event) throws ServiciosException {  
 	    Object oldValue = event.getOldValue();  
 	    Object newValue = event.getNewValue();  
