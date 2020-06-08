@@ -55,8 +55,8 @@ public class PedidosRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Pedido addPedido(Pedido pedido) throws ServiciosException{
         try{
-        	//ojo!!! aca cambie porque pedido no tiene campo nombre
             System.out.println("addPedido-id " + pedido.getId().toString() );    
+            System.out.println("addPedido-fecha " + pedido.getFecha().toString() );    
             pedidosBeans.addPedido(pedido);
 			return pedido;
         }catch(PersistenceException e){
@@ -70,7 +70,6 @@ public class PedidosRest {
     @Produces(MediaType.APPLICATION_JSON)
       public Pedido updatePedido(@PathParam("id") Long id, Pedido pedido) throws ServiciosException{
         try{
-        	//ojo!!! aca cambie porque pedido no tiene campo nombre
             System.out.println("updatePedido-id " + pedido.getId().toString() );
             pedido.setId(id);
             pedidosBeans.updatePedido(pedido);

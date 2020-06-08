@@ -1,7 +1,6 @@
 package com.bean;
 
 import java.util.Date;
-//import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -35,9 +34,7 @@ public class ProductoBean {
 	private String nombre;
 	private String lote;
 	private double precio;
-//	private Date felab;
 	private String felab;
-//	private Date fven;
 	private String fven;
 	private double peso;
 	private double volumen;
@@ -48,7 +45,6 @@ public class ProductoBean {
 	private Usuario usuario;
 	private Familia familia;
 	
-	//20200121 Debe tener constructor x defecto cuando uso este tipo de dato con json de entrada en un método
 	public ProductoBean() {
 	}
 
@@ -112,22 +108,18 @@ public class ProductoBean {
 		this.precio = precio;
 	}
 
-//	public Date getFelab() {
 	public String getFelab() {
 		return felab;
 	}
 
-//	public void setFelab(Date felab) {
 	public void setFelab(String felab) {
 		this.felab = felab;
 	}
 
-//	public Date getFven() {
 	public String getFven() {
 		return fven;
 	}
 
-//	public void setFven(Date fven) {
 	public void setFven(String fven) {
 		this.fven = fven;
 	}
@@ -240,7 +232,6 @@ public class ProductoBean {
 		}
 }
 	
-//	public String add(String nombre, String lote, double precio, Date felab, Date fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, long idUsuario, long idFamilia) {
 	public String add(String nombre, String lote, double precio, String felab, String fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, long idUsuario, long idFamilia) {
 		try{
 			System.out.println("addProducto-nombre " + nombre);			
@@ -255,7 +246,6 @@ public class ProductoBean {
 		}
 	}
 
-//	public String update(Long id, String nombre, String lote, double precio, Date felab, Date fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, Long idUsuario, Long idFamilia){
 	public String update(Long id, String nombre, String lote, double precio, String felab, String fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, Long idUsuario, Long idFamilia){
 		try{
             System.out.println("updateProducto-nombre " + nombre);
@@ -331,15 +321,14 @@ public class ProductoBean {
    }
 	
 
-  	// 20200513 chequear aca si no hay que pasar camopos Date a String
 	
 	 public static class productoValor{
 			private Long valorID;
 			private String valorNombre;
 			private String valorLote;
 			private double valorPrecio;
-			private Date valorfelab;
-			private Date valorfven;
+			private String valorfelab;
+			private String valorfven;
 			private double valorpeso;
 			private double valorvolumen;
 			private int valorestiba;

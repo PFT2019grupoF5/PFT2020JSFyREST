@@ -55,8 +55,8 @@ public class MovimientosRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Movimiento addMovimiento(Movimiento movimiento) throws ServiciosException{
         try{
-        	//ojo!!! aca cambie porque movimiento no tiene campo nombre
             System.out.println("addMovimiento-id " + movimiento.getId().toString() );    
+            System.out.println("addMovimiento-Fecha  " + movimiento.getFecha().toString());    
             movimientosBeans.addMovimiento(movimiento);
 			return movimiento;
         }catch(PersistenceException e){
@@ -70,7 +70,6 @@ public class MovimientosRest {
     @Produces(MediaType.APPLICATION_JSON)
       public Movimiento updateMovimiento(@PathParam("id") Long id, Movimiento movimiento) throws ServiciosException{
         try{
-        	//ojo!!! aca cambie porque movimiento no tiene campo nombre
             System.out.println("updateMovimiento-id " + movimiento.getId().toString() );
             movimiento.setId(id);
             movimientosBeans.updateMovimiento(movimiento);

@@ -1,6 +1,7 @@
 package com.bean;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +12,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.PersistenceException;
 
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
 import com.beans.IPedidosRemote;
@@ -21,7 +21,6 @@ import com.entities.Usuario;
 import com.enumerated.estadoPedido;
 import com.exception.ServiciosException;
 
-import javafx.scene.control.TableColumn.CellEditEvent;
 
 @ManagedBean(name="pedidoB")
 @SessionScoped
@@ -33,15 +32,14 @@ public class PedidoBean {
 	private IUsuariosRemote usuariosEJBBean;
 	
 	private Long id;
-	private Date pedfecestim;
-	private Date fecha;
+	private String pedfecestim;
+	private String fecha;
 	private int pedreccodigo;
-	private Date pedrecfecha;
+	private String pedrecfecha;
 	private String pedreccomentario;
 	private estadoPedido pedestado;
 	private Usuario usuario;
 
-	//20200121 Debe tener constructor x defecto cuando uso este tipo de dato con json de entrada en un método
 	public PedidoBean() {
 	}
 
@@ -49,10 +47,10 @@ public class PedidoBean {
 	private String nomAcceso;
 
 	public pedidoValor[] valorList;
-	
-	
 	public Pedido selected;
 
+
+	// Getters y Setters de atributos de la entidad
 	
 	public Long getId() {
 		return id;
@@ -62,19 +60,19 @@ public class PedidoBean {
 		this.id = id;
 	}
 
-	public Date getPedfecestim() {
+	public String getPedfecestim() {
 		return pedfecestim;
 	}
 
-	public void setPedfecestim(Date pedfecestim) {
+	public void setPedfecestim(String pedfecestim) {
 		this.pedfecestim = pedfecestim;
 	}
 
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
 
@@ -86,11 +84,11 @@ public class PedidoBean {
 		this.pedreccodigo = pedreccodigo;
 	}
 
-	public Date getPedrecfecha() {
+	public String getPedrecfecha() {
 		return pedrecfecha;
 	}
 
-	public void setPedrecfecha(Date pedrecfecha) {
+	public void setPedrecfecha(String pedrecfecha) {
 		this.pedrecfecha = pedrecfecha;
 	}
 
@@ -118,6 +116,11 @@ public class PedidoBean {
 		this.usuario = usuario;
 	}
 
+
+	// fin getters y seters de atributos de la entidad	
+	
+	
+	
 	public String getNomAcceso() {
 		return nomAcceso;
 	}
@@ -170,10 +173,14 @@ public class PedidoBean {
 		}
 	}
 	
-	public String add(Date pedfecestim, Date fecha, int pedreccodigo, Date pedrecfecha, String pedreccomentario, estadoPedido pedestado, String nomAcceso){
+	public String add(String pedfecestim, String fecha, int pedreccodigo, String pedrecfecha, String pedreccomentario, estadoPedido pedestado, String nomAcceso){
 		try{
 			System.out.println("addPedido-pedreccomentario " + pedreccomentario);
-			Pedido pedido = new Pedido(pedfecestim, fecha, pedreccodigo, pedrecfecha, pedreccomentario, pedestado, usuariosEJBBean.getUsuariosBynomAcceso(nomAcceso).get(0));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date Dpedfecestim = sdf.parse(pedfecestim);
+            Date Dfecha = sdf.parse(fecha);
+            Date Dpedrecfecha = sdf.parse(pedrecfecha);
+			Pedido pedido = new Pedido(Dpedfecestim, Dfecha, pedreccodigo, Dpedrecfecha, pedreccomentario, pedestado, usuariosEJBBean.getUsuariosBynomAcceso(nomAcceso).get(0));
 			pedidosEJBBean.addPedido(pedido);
 			return "mostrarPedido";
 		}catch(Exception e){
@@ -182,14 +189,18 @@ public class PedidoBean {
 	}
 		
 	
-	public String update(Long id, Date pedfecestim, Date fecha, int pedreccodigo, Date pedrecfecha, String pedreccomentario, estadoPedido pedestado, Long idUsuario){
+	public String update(Long id, String pedfecestim, String fecha, int pedreccodigo, String pedrecfecha, String pedreccomentario, estadoPedido pedestado, Long idUsuario){
 		try{
             System.out.println("updatePedido-pedreccomentario " + pedreccomentario);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date Dpedfecestim = sdf.parse(pedfecestim);
+            Date Dfecha = sdf.parse(fecha);
+            Date Dpedrecfecha = sdf.parse(pedrecfecha);
             Pedido pedido = pedidosEJBBean.getPedido(id);
-            pedido.setPedfecestim(pedfecestim);
-            pedido.setFecha(pedrecfecha);
+            pedido.setPedfecestim(Dpedfecestim);
+            pedido.setFecha(Dfecha);
             pedido.setPedreccodigo(pedreccodigo);
-            pedido.setPedrecfecha(pedrecfecha);
+            pedido.setPedrecfecha(Dpedrecfecha);
             pedido.setPedreccomentario(pedreccomentario);
             pedido.setPedestado(pedestado);
             pedido.setUsuario(usuariosEJBBean.getUsuario(idUsuario));
@@ -225,10 +236,14 @@ public class PedidoBean {
 	
 //A AGREGAR
 	
-	public String addxID(Date pedfecestim, Date fecha, int pedreccodigo, Date pedrecfecha, String pedreccomentario, estadoPedido pedestado, long idAcceso){
+	public String addxID(String pedfecestim, String fecha, int pedreccodigo, String pedrecfecha, String pedreccomentario, estadoPedido pedestado, long idAcceso){
 		try{
 			System.out.println("addPedido-pedreccomentario " + pedreccomentario);
-			Pedido pedido = new Pedido(pedfecestim, fecha, pedreccodigo, pedrecfecha, pedreccomentario, pedestado, usuariosEJBBean.getUsuario(idAcceso));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date Dpedfecestim = sdf.parse(pedfecestim);
+            Date Dfecha = sdf.parse(fecha);
+            Date Dpedrecfecha = sdf.parse(pedrecfecha);
+			Pedido pedido = new Pedido(Dpedfecestim, Dfecha, pedreccodigo, Dpedrecfecha, pedreccomentario, pedestado, usuariosEJBBean.getUsuario(idAcceso));
 			pedidosEJBBean.addPedido(pedido);
 			return "mostrarPedido";
 		}catch(Exception e){
@@ -307,7 +322,7 @@ public class PedidoBean {
 				 valorList = new pedidoValor[pedidos.size()];
 				 
 				for (Pedido p : pedidos) {
-						 valorList[i] = new pedidoValor(p.getId(), p.getFecha(), p.getPedreccomentario());
+						 valorList[i] = new pedidoValor(p.getId(), p.getFecha().toString(), p.getPedreccomentario());
 						 System.out.println(p.getId() + " " + p.getFecha() + " " + p.getPedreccodigo());
 						 i=i+1;
 				}	 
@@ -321,17 +336,17 @@ public class PedidoBean {
 
 		 public static class pedidoValor{
 				private Long valorID;
-				private Date valorFecha;
+				private String valorFecha;
 
-				private Date valorPedfecestim;
+				private String valorPedfecestim;
 				private int valorPedreccodigo;
-				private Date valorPedrecfecha;
+				private String valorPedrecfecha;
 				private String valorPedreccomentario;
 				private estadoPedido valorPedestado;
 				private Usuario valorUsuario;
 			 
 				
-			public pedidoValor(long valorid, Date valorfecha, String valorcomentario){
+			public pedidoValor(long valorid, String valorfecha, String valorcomentario){
 				this.valorID = valorid;
 		    	this.valorFecha = valorfecha;
 		    	this.valorPedreccomentario=valorcomentario;
@@ -341,7 +356,7 @@ public class PedidoBean {
 			 public long getValorValue(){
 				 return valorID;
 			 }
-			 public Date getValorLabel(){
+			 public String getValorLabel(){
 				 return valorFecha;
 			 }
 

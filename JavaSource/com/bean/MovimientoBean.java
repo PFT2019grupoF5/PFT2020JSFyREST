@@ -1,7 +1,7 @@
 package com.bean;
 
-//import java.util.Date;
-import java.sql.Date;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -31,7 +31,7 @@ public class MovimientoBean {
 	private IAlmacenamientosRemote almacenamientosEJBBean;
 	
 	private long id;
-	private Date fecha;
+	private String fecha;
 	private double cantidad;
 	private String descripcion;
 	private double costo;
@@ -39,15 +39,19 @@ public class MovimientoBean {
 	private Producto producto;
 	private Almacenamiento almacenamiento;
 
-	private List<Producto> productos;
-	private long idProducto;
-	private List<Almacenamiento> almacenamientos;
-	private long idAlmacenamiento;
-
-	//20200121 Debe tener constructor x defecto cuando uso este tipo de dato con json de entrada en un método
 	public MovimientoBean() {
 	}
 
+	//Para buscar Familia y Usuario en el add
+	private long idProducto;
+	private long idAlmacenamiento;
+
+	private List<Producto> productos;
+	private List<Almacenamiento> almacenamientos;
+
+
+	
+// Getters y Setters de atributos de la entidad
 
 	public Long getId() {
 		return id;
@@ -74,11 +78,11 @@ public class MovimientoBean {
 		this.idAlmacenamiento = idAlmacenamiento;
 	}
 
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
 
@@ -129,6 +133,9 @@ public class MovimientoBean {
 	public void setAlmacenamiento(Almacenamiento almacenamiento) {
 		this.almacenamiento = almacenamiento;
 	}
+
+
+	// fin getters y seters de atributos de la entidad	
 
 	
 	// para el menu one de productos
@@ -194,10 +201,12 @@ public class MovimientoBean {
 		}
 	}
 	
-	public String add(Date fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, String nombreProducto, String nombreAlmacenamiento){
+	public String add(String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, String nombreProducto, String nombreAlmacenamiento){
 		try{
 			System.out.println("addMovimiento-descripcion " + descripcion);
-			Movimiento movimiento = new Movimiento(fecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProductosByNombre(nombreProducto).get(0), almacenamientosEJBBean.getAlmacenamientosByNombre(nombreProducto).get(0));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date Dfecha = sdf.parse(fecha);
+			Movimiento movimiento = new Movimiento(Dfecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProductosByNombre(nombreProducto).get(0), almacenamientosEJBBean.getAlmacenamientosByNombre(nombreProducto).get(0));
 			movimientosEJBBean.addMovimiento(movimiento);
 			return "mostrarMovimiento";
 		}catch(Exception e){
@@ -205,11 +214,13 @@ public class MovimientoBean {
 		}
 	}
 
-	public String update(Long id, Date fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, Long idProducto, Long idAlmacenamiento){
+	public String update(Long id, String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, Long idProducto, Long idAlmacenamiento){
 		try{
             System.out.println("updateMovimiento-descripcion " + descripcion);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date Dfecha = sdf.parse(fecha);
             Movimiento movimiento = movimientosEJBBean.getMovimiento(id);
-            movimiento.setFecha(fecha);
+            movimiento.setFecha(Dfecha);
             movimiento.setCantidad(cantidad);
             movimiento.setDescripcion(descripcion);
             movimiento.setCosto(costo);
@@ -243,10 +254,12 @@ public class MovimientoBean {
 		}
 	}
 
-	public String addxID(Date fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, long idProducto, long idAlmacenamiento){
+	public String addxID(String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, long idProducto, long idAlmacenamiento){
 		try{
 			System.out.println("addMovimiento-descripcion " + descripcion);
-			Movimiento movimiento = new Movimiento(fecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProducto(idProducto), almacenamientosEJBBean.getAlmacenamiento(idAlmacenamiento));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date Dfecha = sdf.parse(fecha);
+			Movimiento movimiento = new Movimiento(Dfecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProducto(idProducto), almacenamientosEJBBean.getAlmacenamiento(idAlmacenamiento));
 			movimientosEJBBean.addMovimiento(movimiento);
 			return "mostrarMovimiento";
 		}catch(Exception e){
