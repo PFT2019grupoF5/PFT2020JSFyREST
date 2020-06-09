@@ -55,7 +55,7 @@ public class MovimientosRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Movimiento addMovimiento(Movimiento movimiento) throws ServiciosException{
         try{
-            System.out.println("addMovimiento-id " + movimiento.getId().toString() );    
+            System.out.println("addMovimiento-id " + movimiento.getDescripcion() );    
             System.out.println("addMovimiento-Fecha  " + movimiento.getFecha().toString());    
             movimientosBeans.addMovimiento(movimiento);
 			return movimiento;

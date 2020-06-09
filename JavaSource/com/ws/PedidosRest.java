@@ -55,8 +55,8 @@ public class PedidosRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Pedido addPedido(Pedido pedido) throws ServiciosException{
         try{
-            System.out.println("addPedido-id " + pedido.getId().toString() );    
-            System.out.println("addPedido-fecha " + pedido.getFecha().toString() );    
+            System.out.println("addPedido-codigo " + pedido.getPedreccodigo() );    
+            System.out.println("addPedido-fecha " + pedido.getFecha() );    
             pedidosBeans.addPedido(pedido);
 			return pedido;
         }catch(PersistenceException e){
