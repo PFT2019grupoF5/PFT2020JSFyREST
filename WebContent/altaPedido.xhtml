@@ -14,17 +14,17 @@
 	<h:form>
 		<h:panelGrid>
 			Fecha Estimada Pedido:
-			<pe:calendar value="#{pedidoB.pedfecestim}" />
+			<pe:inputText value="#{pedidoB.pedfecestim}" pattern="yyyy-MM-dd"/>
 			
  			Fecha de Pedido:
-			<pe:calendar value="#{pedidoB.fecha}" />
+			<p:inputText value="#{pedidoB.fecha}" pattern="yyyy-MM-dd"/>
 			 
 			Recibo Codigo Pedido:
 			<pe:inputText id="pedreccodigo" value="#{pedidoB.pedreccodigo}" required="true" />
 			<pe:message for="pedreccodigo" style="color:red" />
 					
 			Recibo Fecha Pedido:
-			<pe:calendar value="#{pedidoB.pedrecfecha}"/>
+			<p:inputText value="#{pedidoB.pedrecfecha}" pattern="yyyy-MM-dd"/>
 
 			Recibo Comentario Pedido:
 			<pe:inputText id="pedreccomentario" value="#{pedidoB.pedreccomentario}" required="true" size="250"/>

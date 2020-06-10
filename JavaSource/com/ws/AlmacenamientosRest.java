@@ -15,7 +15,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 
 import com.beans.IAlmacenamientosRemote;
-import com.beans.IEntidadLocRemote;
 import com.entities.Almacenamiento;
 import com.exception.ServiciosException;
 

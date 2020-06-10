@@ -25,10 +25,10 @@
 			<p:message for="precio" style="color:red" />
 					
 			Fecha de Elaborado:
-			<p:calendar value="#{productoB.felab}" />
+			<p:inputText value="#{productoB.felab}" pattern="yyyy-MM-dd"/>
 			
 			Fecha de Vencimiento:
-			<p:calendar value="#{productoB.fven}" />
+			<p:inputText value="#{productoB.fven}" pattern="yyyy-MM-dd"/>
 
 			Peso:
 			<p:inputNumber id="peso" value="#{productoB.peso}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>

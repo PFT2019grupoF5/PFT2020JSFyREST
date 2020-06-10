@@ -257,6 +257,7 @@ public class MovimientoBean {
 	public String addxID(String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, long idProducto, long idAlmacenamiento){
 		try{
 			System.out.println("addMovimiento-descripcion " + descripcion);
+			System.out.println("addMovimiento-fecha " + fecha);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date Dfecha = sdf.parse(fecha);
 			Movimiento movimiento = new Movimiento(Dfecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProducto(idProducto), almacenamientosEJBBean.getAlmacenamiento(idAlmacenamiento));

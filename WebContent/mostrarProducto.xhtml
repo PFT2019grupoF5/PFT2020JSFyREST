@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+<h:head></h:head> 
+<body> 
+
+	<h1>Datos ingresados</h1>
+
+	<h:panelGrid columns="1">
+		<h:outputLabel value="Nombre: #{productoB.nombre}" />
+		<h:outputLabel value="Lote: #{productoB.lote}" />
+		<h:outputLabel value="Precio: #{productoB.precio}" />
+		<h:outputLabel value="Fecha de Elaborado: #{productoB.felab}" />
+		<h:outputLabel value="Fecha de Vencimiento: #{productoB.fven}" />
+		<h:outputLabel value="Peso: #{productoB.peso}" />
+		<h:outputLabel value="Volumen: #{productoB.volumen}" />
+		<h:outputLabel value="Estiba: #{productoB.estiba}" />
+		<h:outputLabel value="Stock Mínimo: #{productoB.stkMin}" />
+		<h:outputLabel value="Stock Total: #{productoB.stkTotal}" />
+		<h:outputLabel value="Segmentable: #{productoB.segmentac}" />
+		<h:outputLabel value="IdUsuario: #{productoB.idUsuario}" />
+		<h:outputLabel value="IdFamilia: #{productoB.idFamilia}" />
+	</h:panelGrid>
+
+</body> 
+</html>

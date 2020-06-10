@@ -13,7 +13,7 @@
 	<h:form>
 		<h:panelGrid>
 			Fecha:
-			<p:calendar value="#{movimientoB.fecha}" />
+			<p:inputText value="#{movimientoB.fecha}" pattern="yyyy-MM-dd"/>
 			
 			Cantidad:
 			<p:inputNumber id="cantidad" value="#{movimientoB.cantidad}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
