@@ -25,6 +25,20 @@ public class UsuariosRest {
 	@EJB
 	private IUsuariosRemote usuariosBeans;
 	
+	@Path("/check/{user,pass}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean checkLogin(@PathParam("user") String user, @PathParam("pass") String pass) throws ServiciosException {
+		try{
+			System.out.println("Usuario recibido"+user);
+			System.out.println("pass recibida"+pass);
+			//Método que comprueba la existencia del usuario
+			Boolean usuario = usuariosBeans.checkUser(user,pass);
+			return usuario;
+		}catch(PersistenceException e){
+			throw new ServiciosException("No se pudo borrar usuario");
+		}
+    }
+	
 	@GET
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)

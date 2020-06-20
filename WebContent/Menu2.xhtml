@@ -20,9 +20,9 @@
 			      <h:message for="contraseña" styleClass="text-danger"/>
 			    </h:panelGrid>
 	  	
-	  			<h:commandButton value="LogIn" action="#{usuarioB.getUsuarioLoged(usuarioB.nomAcceso, usuarioB.contrasena)}" >
-	  			    <f:param id="usu" name="usuario" value="#{usuarioB.nomAcceso}"/>
-            		<f:param id="contra" name="contra" value="#{usuarioB.contrasena}"/>
+	  			<h:commandButton value="LogIn" action="#{usuarioB.checkUser(usuarioB.nomAcceso, usuarioB.contrasena)}" >
+	  			    <!--  <f:param id="usu" name="usuario" value="#{usuarioB.nomAcceso}"/> -->
+            		<!--  <f:param id="contra" name="contra" value="#{usuarioB.contrasena}"/> -->
 	  			</h:commandButton>
 	  		</h:form>
 	  		
