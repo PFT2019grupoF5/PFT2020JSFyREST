@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.persistence.PersistenceException;
@@ -14,6 +15,10 @@ import com.entities.Perfil;
 import com.enumerated.tipoPerfil;
 import com.entities.Usuario;
 import com.exception.ServiciosException;
+import org.primefaces.context.RequestContext;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 @ManagedBean(name="usuarioB")
 @SessionScoped
@@ -35,6 +40,7 @@ public class UsuarioBean {
 	private String correo;
 	private Perfil perfil;
 	private boolean loged;
+	private FacesMessage mensaje;
 	
 	public usuarioValor[] valorList;
 	
@@ -242,29 +248,77 @@ public class UsuarioBean {
 	}
 
 	
-	public String getUsuarioLoged(String user, String pass) throws ServiciosException{
+	public void getUsuarioLoged(ActionEvent actionEvent) throws ServiciosException{
 		
-		System.out.println(user + " " +pass);
+		//System.out.println(user + " " +pass);
+		RequestContext context = RequestContext.getCurrentInstance();
+	    FacesMessage mensaje = null;
 		
 		try{
-			Usuario usuario= usuariosEJBBean.getUnUsuarioBynomAcceso(user); 
+			Usuario usuario= usuariosEJBBean.getUnUsuarioBynomAcceso(nomAcceso); 
 			
 			if ( usuario == null ) {
-				return null; // (""No existe usuario con nomAcceso seleccionado 
+			      loged = false;
+			      mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error", "Credenciales no válidas");
+
+//				return null; // (""No existe usuario con nomAcceso seleccionado 
+
 			} else {
 				
 				
-				if (pass.equals(usuario.getContrasena()) && (user.equals(usuario.getNomAcceso()))) {
-					MenuBean menu = new MenuBean(true);
+				if (contrasena.equals(usuario.getContrasena()) && (nomAcceso.equals(usuario.getNomAcceso()))) {
+					
+					loged = true;
+					mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenid@", usuario.getNombre() + " " + usuario.getApellido());
+					System.out.println("USUARIO CORRECTO");
+
+				} else {
+				      loged = false;
+				      mensaje = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error", "Credenciales no válidas");
+				      System.out.println("USUARIO INCORRECTO");
+				}
+					
+				FacesContext.getCurrentInstance().addMessage(null, mensaje);
+			    context.addCallbackParam("estaLogeado", loged);
+			    
+			    if (loged) {
+			    	
+			    	
+			    	Perfil perfilLogueado;
+			    	//perfilLogueado = 
+			    	//String PL;
+			    	perfilLogueado = usuario.getPerfil();
+			    	tipoPerfil tipoPerfilLogueado;
+			    	tipoPerfilLogueado = perfilLogueado.getPerfil();
+			    	
+			    	
+			    	//String pl= perfilLogueado.getPerfil().;
+			    	//System.out.print(perfilLogueado.getPerfil().valueOf(nombrePerfil));
+			    	
+			    	
+			    	if (tipoPerfil.ADMINISTRADOR.equals(tipoPerfilLogueado)) {
+			    	      context.addCallbackParam("view", "MenuADM.xhtml");
+			    	}else
+				    	if (tipoPerfil.SUPERVISOR.equals(tipoPerfilLogueado)){
+				    	      context.addCallbackParam("view", "MenuSUP.xhtml");
+			    	}else
+			    		if (tipoPerfil.OPERARIO.equals(tipoPerfilLogueado)){
+				    	      context.addCallbackParam("view", "MenuOPE.xhtml");
+			    		}
+			    	}		
 				
 					
-					return usuario.getPerfil().getPerfil().toString();
-				}else {
-					return null;
-				}
+//					MenuBean menu = new MenuBean(true);
+//					return usuario.getPerfil().getPerfil().toString();
+//				}else {
+//					
+//					return null;
 			}
+			
 		}catch(PersistenceException e){
-			throw new ServiciosException("No se pudo obtener datos del usuario mediante Nombre de Usuario " + user);
+			System.out.println("USUARIO NO EXISTE");
+
+			throw new ServiciosException("No se pudo obtener datos del usuario mediante Nombre de Usuario " + nomAcceso);
 		}
 	}
 

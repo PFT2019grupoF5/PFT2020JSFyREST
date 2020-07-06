@@ -1,6 +1,7 @@
 package com.bean;
 
 import java.util.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -234,10 +235,13 @@ public class ProductoBean {
 	
 	public String add(String nombre, String lote, double precio, String felab, String fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, long idUsuario, long idFamilia) {
 		try{
-			System.out.println("addProducto-nombre " + nombre);			
+			System.out.println("addProducto-nombre " + nombre);		
+			System.out.println("addProducto-nombre " + nombre + " " + lote + " " +  precio + " " + felab + " " + fven + " " + peso + " " + volumen + " " + estiba + " " + stkMin + " " + stkTotal + " " + segmentac + " " + idUsuario  + " " + idFamilia);			
+
+			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date Dfelab = sdf.parse(felab);
-			Date Dfven = sdf.parse(fven);
+            Date Dfven = sdf.parse(fven);
 			Producto producto = new Producto(nombre, lote, precio, Dfelab, Dfven, peso, volumen, estiba, stkMin, stkTotal, segmentac, usuariosEJBBean.getUsuario(idUsuario) , familiasEJBBean.getFamilia(idFamilia));
 			productosEJBBean.addProducto(producto);
 			return "mostrarProducto";

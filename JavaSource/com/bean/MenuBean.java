@@ -21,6 +21,8 @@ public class MenuBean {
 		// Create menuitems required
 		
 		if (logueado) {
+			System.out.println("MENU BEAN Ingresó");
+			
 			DefaultMenuItem menuCiudades = new DefaultMenuItem("Ciudades");
 			menuCiudades.setUrl("/faces/altaCiudad.xhtml");
 			this.menuButton.addElement(menuCiudades);

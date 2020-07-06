@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<script name="jquery/jquery.js" library="primefaces"></script>
+</h:head>
+
+<h:body>
+	<h2>Menú Inicial</h2>
+		<h:form style="width:400px;">
+			<p:tieredMenu autoDisplay="false" trigger="triggerBtnADM" overlay="true" my="left top" at="right top">
+	
+				<p:submenu label="Altas de Datos">
+					<p:menuitem value="Alta Usuarios" url="/faces/altaUsuario.xhtml"></p:menuitem>
+					<p:menuitem value="Alta Perfil" url="/faces/altaPerfil.xhtml"></p:menuitem>
+					<p:menuitem value="Alta de Ciudades" url="/faces/altaCiudad.xhtml"></p:menuitem>
+					<p:menuitem value="Alta Familias" url="/faces/altaFamilia.xhtml"></p:menuitem>
+					<p:menuitem value="Alta Locales" url="/faces/altaEntidadLoc.xhtml"></p:menuitem>
+					<p:menuitem value="Alta Almacenamientos" url="/faces/altaAlmacenamiento.xhtml"></p:menuitem>
+					<p:menuitem value="Alta Movimientos" url="/faces/altaMovimiento.xhtml"></p:menuitem>
+					<p:menuitem value="Alta Productos" url="/faces/altaProducto.xhtml"></p:menuitem>
+	
+				</p:submenu>
+	
+				<p:submenu label="Reportes">
+					<p:menuitem value="Reporte de Movimientos por Fecha" url="/faces/BMMovimiento.xhtml"></p:menuitem>
+	
+					<p:menuitem value="Reporte de Almacenamientos" url="/faces/mostrarAlmacenamiento.xhtml"></p:menuitem>
+					<p:menuitem value="Reporte de Ciudades" url="/faces/mostrarCiudad.xhtml"></p:menuitem>
+					<p:menuitem value="Reporte de Locales" url="/faces/mostrarEntidadLoc.xhtml"></p:menuitem>
+					<p:menuitem value="Reporte de Pedidos" url="/faces/mostrarPedido2.xhtml"></p:menuitem>
+				</p:submenu>
+		</p:tieredMenu>
+
+			<p:commandButton value="MENU PRINCIPAL" id="triggerBtnADM" onclick="showMenu()"></p:commandButton>
+		</h:form>
+
+	</h:body>
+</html>

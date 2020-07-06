@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+  
+<h:head>
+  	<h:outputStylesheet library="css" name="bootstrap.min.css" />     
+    <title>""</title>
+    <style type="text/css">
+        .tableUpdated {
+            width: 90% !important;
+            margin: 17px 58px 0 !important;
+        }
+        .btnSpace {
+            margin: 17px;
+        }     
+    </style>
+</h:head>
+
+<h:head>
+
+<style type="text/css">
+	.ui-row-editor .ui-row-editor-pencil {
+		margin-left:8px;
+	}
+</style>
+</h:head>
+
+<h:body>
+
+	
+    <h:form id="frmMovForm">
+   
+    <center><h2><h:outputText value="Listado de Movimientos"/></h2></center>
+
+	Fecha de Inicio:
+    <h:inputText id="fechaIni" value="#{fecIni}" pattern="yyyy-MM-dd" mask="?9999-99-99" placeholder="____-__-__" />
+    <br></br>		
+    		
+    Fecha Fin:
+    <h:inputText id="fechaFin" value="#{fecFin}" pattern="yyyy-MM-dd" mask="?9999-99-99" placeholder="____-__-__" />
+    <br></br>		
+    
+	<p:commandButton value="Buscar" action="#{movimientoB.getMovimientosEntreFechas(fecIni, fecFin)}"  />
+    <br></br>		
+    <br></br>		
+  
+
+             
+        <p:dataTable id="bajaMovimientosTable" value="#{movimientoB.allLista}" var="m" editable="true" editMode="cell" widgetVar="cellPed">
+             
+        <f:facet name="header">  
+  	    	Listado de Movimientos
+    	</f:facet>  
+ 
+ 
+            <p:column headerText="ID" filterBy="#{m.id}" filterMatchMode="contains">      
+    	        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{m.id}"/></f:facet>  
+                    <f:facet name="input"><h:inputText id="idInput" value="#{movimientoB.id}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+       	 
+            
+            <p:column headerText="Descripción" filterBy="#{m.descripcion}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{m.descripcion}"/></f:facet>  
+		    	    <f:facet name="input"><h:inputText id="descripcionInput" value="#{movimientoB.descripcion}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+        	 
+       	    <p:column headerText="Producto" filterBy="#{m.producto.nombre}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{m.producto.nombre}"/></f:facet>  
+		    	    <f:facet name="input"><h:inputText id="productoInput" value="#{movimientoB.producto.nombre}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>  
+		        
+		    </p:column>  
+       
+       	     <p:column headerText="Cantidad" filterBy="#{m.cantidad}" filterMatchMode="contains">      
+		          <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{m.cantidad}"/></f:facet>  
+		    	    <f:facet name="input"><h:inputText id="precioInput" value="#{movimientoB.cantidad}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+       	 
+       	     <p:column headerText="Fecha" filterBy="#{m.fecha}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{m.fecha}"/></f:facet>  
+  		    	    <f:facet name="input"><h:inputText id="fvenInput" value="#{movimientoB.fecha}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+       	 	
+       	 		    
+            <p:column headerText="Acción">
+                <f:facet name="Accion"></f:facet>
+              		<p:commandButton value="Eliminar" action="#{movimientoB.deleteClase(m)}"  />
+            </p:column>
+       	</p:dataTable>
+
+            <h:commandButton action="altaMovimiento.xhtml?faces-redirect=true" value="Agregar Movimientos" class="btn btn-success btnSpace" />
+
+     </h:form>
+
+</h:body>
+</html>
+

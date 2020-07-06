@@ -93,6 +93,30 @@ public class UsuariosRest {
 			throw new ServiciosException("No se pudo borrar usuario");
 		}
     }
+
     
+	@GET
+    @Path("/getValidoLogin/{nomAcceso, pass}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean getUsuario(@PathParam("nomAcceso") String nomAcceso, @PathParam("pass") String pass) throws ServiciosException {
+		try{
+			System.out.println("getValidoLogin-nomAcceso-pass " + nomAcceso + pass); 
+			Usuario usuario= usuariosBeans.getUnUsuarioBynomAcceso(nomAcceso); 
+			
+			if (usuario != null ) {   //existe el usuario
+				if (nomAcceso.equals(usuario.getNomAcceso()) && pass.equals(usuario.getContrasena())) {
+					return true; //existe el usuario, y el nomAcceso y contraseña concuerdan
+				}else	{	
+					return false; //usuario y contraseña no concuerdan, por lo que se devuelve false
+				}
+		    }else {
+		    	return false; // NO existe el usuario
+		    }			
+			
+		}catch(PersistenceException e){
+			throw new ServiciosException("No se pudo obtener usuario con nomAcceso " + nomAcceso );
+		}
+    }
+
 }
 	
