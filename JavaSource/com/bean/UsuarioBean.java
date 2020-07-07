@@ -26,7 +26,7 @@ import javax.faces.event.ActionEvent;
 public class UsuarioBean {
 	
 	@EJB
-	private IUsuariosRemote usuariosEJBBean;
+	private static IUsuariosRemote usuariosEJBBean;
 	@EJB
 	private IPerfilesRemote perfilesEJBBean;
 	
@@ -135,6 +135,19 @@ public class UsuarioBean {
 	public tipoPerfil[] getTiposDePerfiles() {
 		return tipoPerfil.values();
 	}
+	
+	// chequear usuario
+		public static void checkUser(String user, String pass) {
+			try {
+				System.out.println("sssssssssssssssssssssssssssssssssssssssssssssssss" + user);
+				System.out.println("sssssssssssssssssssssssssssssssssssssssssssssssss" + pass);
+				usuariosEJBBean.checkUser(user, pass);
+			} catch (ServiciosException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("No se instancia el ejb");
+			}
+		}
 	
 
 	public String getAll() throws ServiciosException{
