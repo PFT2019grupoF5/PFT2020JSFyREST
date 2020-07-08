@@ -1,13 +1,17 @@
 package com.bean;
 
 import java.util.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.PersistenceException;
 
 import com.beans.IProductosRemote;
@@ -188,6 +192,47 @@ public class MovimientoBean {
 		}
 	}
 
+/*
+	public String getMovimientosEntreFechas(String fecini, String fecfin) throws ServiciosException{
+		try{
+			
+			
+            
+			try {
+				
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("es", "ES"));
+
+				Date DfecInicial = sdf.parse(fecini);
+				Date DfecFinal = sdf.parse(fecfin);
+				//sdf.parse(fecfin);
+
+				System.out.println("EJECUTO EN MOVIMIENTOBEAN");
+				System.out.println(fecini);
+				System.out.println(fecfin);
+				System.out.println(DfecInicial);
+				System.out.println(DfecFinal);
+
+				
+				List<Movimiento> listaMovimientos = movimientosEJBBean.getMovimientosEntreFecha(DfecInicial, DfecFinal); 
+			
+				if ( listaMovimientos.isEmpty()) {
+					return null; // ("No existen movimientos con fecha entre " + fecini y fecfin)
+				} else {
+					return "mostrarListaMovimientos";
+				}
+			} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		}catch(PersistenceException e){
+			throw new ServiciosException("No se pudieron obtener movimientos entre Fecha de Inicio " + fecini + " y Fecha de Fin " + fecfin );
+		}
+		return null;
+	}
+
+*/	
 	public String getMovimientosById(Long id) throws ServiciosException{
 		try{
 			Movimiento movimiento = movimientosEJBBean.getMovimiento(id); 
@@ -233,6 +278,8 @@ public class MovimientoBean {
 			return null;
 		}
 	}
+
+	
 	
 	public String delete(Long id){
 		try{

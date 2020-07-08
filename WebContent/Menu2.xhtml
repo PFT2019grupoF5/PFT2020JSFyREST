@@ -3,12 +3,13 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-
 <h:head>
 	<script name="jquery/jquery.js" library="primefaces"></script>
 </h:head>
 
-
+<h:body>
+	<p:growl id="mensajes" showDetail="true" life="2000" />
+ 	
  		<h2>Log in:</h2>
 			<h:form id="loginForm">
 			    <h:panelGrid columns="3">
@@ -18,60 +19,30 @@
 			      Contraseña:
 			      <h:inputSecret id="contraseña" value="#{usuarioB.contrasena}" required="true" label="contraseña" styleClass="form-control"/>
 			      <h:message for="contraseña" styleClass="text-danger"/>
-			    </h:panelGrid>
 	  	
-	  			<h:commandButton value="LogIn" action="#{usuarioB.checkUser(usuarioB.nomAcceso, usuarioB.contrasena)}" >
-	  			    <!--  <f:param id="usu" name="usuario" value="#{usuarioB.nomAcceso}"/> -->
-            		<!--  <f:param id="contra" name="contra" value="#{usuarioB.contrasena}"/> -->
-	  			</h:commandButton>
-	  		</h:form>
-	  		
+	  			 <f:facet name="footer">
+	  				<p:commandButton value="LogIn" 
+	  							 actionListener="#{usuarioB.getUsuarioLoged}" update=":mensajes" 
+                                 oncomplete="manejarLogin(xhr, status, args)" />
+	  			    <!--  <f:param id="usu" name="usuario" value="#{usuarioB.nomAcceso}"/>
+            		<f:param id="contra" name="contra" value="#{usuarioB.contrasena}"/>
+            		 
+	  				</p:commandButton>
+	  		-->
+	  			</f:facet>	
+			    </h:panelGrid>
+  </h:form>
 
+</h:body>
 
-<h:form style="width:400px;">
-	<p:growl id="message1"></p:growl>
-	<p:tieredMenu autoDisplay="false" trigger="triggerBtnADM" overlay="true" my="left top" at="right top">
+<script type="text/javascript">
+  function manejarLogin(xhr, status, args) {
+    if (!args.validationFailed) {
+      setTimeout(function() {
+        window.location = args.view;
+      }, 500);
+    }
+  }
+</script>
 
-
-			<p:submenu label="Ciudades">
-				<p:menuitem value="Alta de Ciudades" url="/faces/altaCiudad.xhtml"></p:menuitem>
-			</p:submenu>
-		
-			<p:submenu label="Alta de Familias">
-				<p:menuitem value="Alta Familias" url="/faces/altaFamilia.xhtml"></p:menuitem>
-			</p:submenu>
-
-			<p:submenu label="Alta de Locales">
-				<p:menuitem value="Alta Locales" url="/faces/altaLocal.xhtml"></p:menuitem>
-			</p:submenu>
-		
-			<p:submenu label="Alta de Almacenamientos">
-				<p:menuitem value="Alta Almacenamientos" url="/faces/altaAlmacenamiento.xhtml"></p:menuitem>
-			</p:submenu>
-
-			<p:submenu label="Alta de Productos">
-				<p:menuitem value="Alta Movimientos" url="/faces/altaMovimiento.xhtml"></p:menuitem>
-			</p:submenu>
-
-			<p:submenu label="Baja de Productos">
-				<p:menuitem value="Baja de Productos" url="/faces/bajaProducto.xhtml"></p:menuitem>
-			</p:submenu>
-
-			<p:submenu label="Baja de Movimientos">
-				<p:menuitem value="Baja de Movimientos" url="/faces/bajaMovimiento.xhtml"></p:menuitem>
-			</p:submenu>
-
-			<p:submenu label="Reportes">
-				<p:menuitem value="Reporte de Almacenamientos" url="/faces/mostrarAlmacenamiento.xhtml"></p:menuitem>
-				<p:menuitem value="Reporte de Ciudades" url="/faces/mostrarCiudad.xhtml"></p:menuitem>
-				<p:menuitem value="Reporte de Locales" url="/faces/mostrarEntidadLoc.xhtml"></p:menuitem>
-	
-				<p:menuitem value="Reporte de Pedidos" url="/faces/mostrarPedido2.xhtml"></p:menuitem>
-			</p:submenu>
-	</p:tieredMenu>
-
-	<p:commandButton value="INICIO" id="triggerBtnADM" onclick="showMenu()"></p:commandButton>
-				
-	
-</h:form>
 </html>

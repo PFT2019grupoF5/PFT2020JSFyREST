@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+  
+<h:head>
+  	<h:outputStylesheet library="css" name="bootstrap.min.css" />     
+    <title>""</title>
+    <style type="text/css">
+        .tableUpdated {
+            width: 90% !important;
+            margin: 17px 58px 0 !important;
+        }
+        .btnSpace {
+            margin: 17px;
+        }     
+    </style>
+</h:head>
+
+<h:head>
+
+<style type="text/css">
+	.ui-row-editor .ui-row-editor-pencil {
+		margin-left:8px;
+	}
+</style>
+</h:head>
+
+<h:body>
+
+    <h:form id="bajaProdForm">
+   
+    <center><h2><h:outputText value="Productos"/></h2></center>
+   
+     
+        <p:dataTable id="bajaProductosTable" value="#{productoB.allLista}" var="p" editable="true" editMode="cell" widgetVar="cellPed">
+             
+        <f:facet name="header">  
+  	    	Listado de Productos
+    	</f:facet>  
+ 
+            <p:column headerText="ID" filterBy="#{p.id}" filterMatchMode="contains">      
+    	        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.id}"/></f:facet>  
+                    <f:facet name="input"><h:inputText id="idInput" value="#{productoB.id}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+       	 
+            
+            <p:column headerText="Nombre" filterBy="#{p.nombre}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.nombre}"/></f:facet>  
+		    	    <f:facet name="input"><h:inputText id="nombreInput" value="#{productoB.nombre}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+        	 
+       	    <p:column headerText="Lote" filterBy="#{p.lote}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.lote}"/></f:facet>  
+		    	    <f:facet name="input"><h:inputText id="loteInput" value="#{productoB.lote}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>  
+		        
+		    </p:column>  
+       
+       	     <p:column headerText="Precio" filterBy="#{p.precio}" filterMatchMode="contains">      
+		          <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.precio}"/></f:facet>  
+		    	    <f:facet name="input"><h:inputText id="precioInput" value="#{productoB.precio}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+       	 
+       	     <p:column headerText="Fecha de Vencimiento" filterBy="#{p.fven}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.fven}"/></f:facet>  
+  		    	    <f:facet name="input"><h:inputText id="fvenInput" value="#{productoB.fven}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+       	 	
+       	 
+       	     <p:column headerText="Peso" filterBy="#{p.peso}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.peso}"/></f:facet>  
+		    	    <f:facet name="input"><h:inputText id="pesoInput" value="#{productoB.peso}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>  
+       	 
+       	     <p:column headerText="Volumen" filterBy="#{p.volumen}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.volumen}"/></f:facet>  
+		            <f:facet name="input"><h:inputText id="volumenInput" value="#{productoB.volumen}" style="width:96%"/></f:facet>
+		      	</p:cellEditor>
+		    </p:column>  
+       	 
+       	     <p:column headerText="Estiba" filterBy="#{p.estiba}" filterMatchMode="contains">      
+		        <p:cellEditor>  
+		            <f:facet name="output"><h:outputText value="#{p.estiba}"/></f:facet>  
+   		    	    <f:facet name="input"><h:inputText id="estibaInput" value="#{productoB.estiba}" style="width:96%"/></f:facet>
+		    	</p:cellEditor>
+		    </p:column>
+		    
+		    
+            <p:column headerText="Acción">
+                <f:facet name="Accion"></f:facet>
+              		<p:commandButton value="Eliminar" action="#{productoB.deleteClase(p)}"  />
+               		<p:commandButton value="Modificar" action="#{productoB.update(productoB.id, productoB.nombre, productoB.lote, productoB.precio, productoB.felab, productoB.fven, productoB.peso, productoB.volumen, productoB.estiba, productoB.stkMin, productoB.stkTotal, productoB.segmentac, productoB.usuario.id, productoB.familia.id)}"/>
+              		
+            </p:column>
+       	</p:dataTable>
+
+            <h:commandButton action="altaProductos.xhtml?faces-redirect=true" value="Agregar Productos" class="btn btn-success btnSpace" />
+
+     </h:form>
+
+</h:body>
+</html>
+

@@ -25,11 +25,12 @@
 			<p:message for="precio" style="color:red" />
 					
 			Fecha de Elaborado:
-			<p:inputText value="#{productoB.felab}" pattern="yyyy-MM-dd"/>
+			<p:inputText id="calfelab" value="#{productoB.felab}" pattern="yyyy-MM-dd" mask="?9999-99-99" placeholder="____-__-__" />
 			
+					
 			Fecha de Vencimiento:
-			<p:inputText value="#{productoB.fven}" pattern="yyyy-MM-dd"/>
-
+			<p:inputText value="#{productoB.fven}" pattern="yyyy-MM-dd" mask="9999-99-99" placeholder="____-__-__" />
+    		
 			Peso:
 			<p:inputNumber id="peso" value="#{productoB.peso}" required="true"  onkeypress="if(event.which &lt; 48 || event.which &gt; 57) if(event.which != 46) return false;"/>
 			<p:message for="peso" style="color:red" />
@@ -59,17 +60,19 @@
 			Usuario:
 			<p:selectOneMenu id="usu" value="#{productoB.idUsuario}">
 				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
- 				<f:selectItems var="c" value="#{productoB.listaUsuario}" itemLabel="#{c.nombre}" itemValue="${c.id}" />
+ 				<f:selectItems var="u" value="#{productoB.listaUsuario}" itemLabel="#{u.nombre}" itemValue="${u.id}" />
 			</p:selectOneMenu>
 
 			Familia:
 			<p:selectOneMenu  id="fam" value="#{productoB.idFamilia}">
 				<f:selectItem itemLabel="Seleccione..."  itemValue="" noSelectionOption="true"/>
- 				<f:selectItems var="c" value="#{productoB.listaFamilia}" itemLabel="#{c.nombre}" itemValue="${c.id}" />
+ 				<f:selectItems var="f" value="#{productoB.listaFamilia}" itemLabel="#{f.nombre}" itemValue="${f.id}" />
 			</p:selectOneMenu>
 		</h:panelGrid>
 					
+					
 		<h:commandButton value="Guardar" action="#{productoB.add(productoB.nombre, productoB.lote, productoB.precio, productoB.felab, productoB.fven, productoB.peso, productoB.volumen, productoB.estiba, productoB.stkMin, productoB.stkTotal, productoB.segmentac, productoB.idUsuario, productoB.idFamilia)}"/>
+					
 					
 	</h:form>
 
