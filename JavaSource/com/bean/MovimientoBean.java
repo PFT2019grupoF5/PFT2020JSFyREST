@@ -192,14 +192,13 @@ public class MovimientoBean {
 		}
 	}
 
-/*
+
 	public String getMovimientosEntreFechas(String fecini, String fecfin) throws ServiciosException{
 		try{
 			
 			
             
 			try {
-				
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("es", "ES"));
 
@@ -212,7 +211,6 @@ public class MovimientoBean {
 				System.out.println(fecfin);
 				System.out.println(DfecInicial);
 				System.out.println(DfecFinal);
-
 				
 				List<Movimiento> listaMovimientos = movimientosEJBBean.getMovimientosEntreFecha(DfecInicial, DfecFinal); 
 			
@@ -232,7 +230,7 @@ public class MovimientoBean {
 		return null;
 	}
 
-*/	
+	
 	public String getMovimientosById(Long id) throws ServiciosException{
 		try{
 			Movimiento movimiento = movimientosEJBBean.getMovimiento(id); 

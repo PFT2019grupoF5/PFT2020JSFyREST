@@ -118,6 +118,6 @@ public class UsuariosRest {
 			throw new ServiciosException("No se pudo obtener usuario con nomAcceso " + nomAcceso );
 		}
     }
-
+	
 }
 	
