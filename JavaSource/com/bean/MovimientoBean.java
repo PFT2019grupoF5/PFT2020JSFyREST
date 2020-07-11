@@ -193,6 +193,8 @@ public class MovimientoBean {
 	}
 
 
+	
+	
 	public String getMovimientosEntreFechas(String fecini, String fecfin) throws ServiciosException{
 		try{
 			

@@ -409,6 +409,19 @@ public class PedidoBean {
 		}
 		
 
+		
 
+		public String getPedidosEntreFechas(String fechaDesde, String fechaHasta) throws ServiciosException{
+			try{
+				List<Pedido> listaPedidos = pedidosEJBBean.getPedidosEntreFechas(fechaDesde, fechaHasta); 
+				if ( listaPedidos.isEmpty()) {
+					return null; // ("No existen pedidos")
+				} else {
+					return "mostrarListaPedidos";
+				}
+			}catch(PersistenceException e){
+				throw new ServiciosException("No se pudo obtener reporte de pedidos");
+			}
+		}
 
 }

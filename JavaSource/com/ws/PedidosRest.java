@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 
 import com.beans.IPedidosRemote;
+import com.entities.Movimiento;
 import com.entities.Pedido;
 import com.exception.ServiciosException;
 
@@ -94,5 +95,18 @@ public class PedidosRest {
 			throw new ServiciosException("No se pudo borrar pedido");
 		}
     }
+    
+	@GET
+    @Path("/getPedidosEntreFechas/{fechaDesde}/{fechaHasta}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Pedido> getPedidosEntreFechas(@PathParam("fechaDesde") String fechaDesde, @PathParam("fechaHasta") String fechaHasta) throws ServiciosException {
+		try{
+			List<Pedido> listaPedidos = pedidosBeans.getPedidosEntreFechas(fechaDesde, fechaHasta); 
+			return listaPedidos;
+		}catch(PersistenceException e){
+			throw new ServiciosException("No se pudo obtener el reporte de pedidos");
+		}
+    }
+    
     
 }

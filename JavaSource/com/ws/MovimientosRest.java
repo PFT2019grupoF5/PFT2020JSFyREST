@@ -16,6 +16,7 @@ import javax.ws.rs.PUT;
 
 import com.beans.IMovimientosRemote;
 import com.entities.Movimiento;
+import com.entities.Usuario;
 import com.exception.ServiciosException;
 
 @Stateless
@@ -94,5 +95,5 @@ public class MovimientosRest {
 			throw new ServiciosException("No se pudo borrar movimiento");
 		}
     }
-    
+
 }
