@@ -1,7 +1,6 @@
 package com.bean;
 
 import java.util.Date;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -364,21 +363,6 @@ public class ProductoBean {
 		}
 	}
 
-	
-	
-	public Boolean StocKsuficienteDeProducto(int cantidad, String nombreProducto) throws ServiciosException{
-		try{
-			List<Producto> listaProductos = productosEJBBean.getProductosByNombre(nombreProducto); 
-			if ( listaProductos.isEmpty()) {
-				return null; // ("No existen productos con nombre " + nombre")
-			} else {
-				return listaProductos.get(0).getStkTotal() >= cantidad;
-			}
-		}catch(PersistenceException e){
-			throw new ServiciosException("No se pudo obtener el producto con nombre " + nombreProducto);
-		}
-	}
-	
 	
 
   	@PostConstruct

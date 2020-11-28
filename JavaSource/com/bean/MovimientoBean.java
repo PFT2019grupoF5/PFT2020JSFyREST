@@ -198,9 +198,6 @@ public class MovimientoBean {
 		}
 	}
 
-
-	
-	
 	public String getMovimientosEntreFechas(String fecini, String fecfin) throws ServiciosException{
 		try{
 			try {
@@ -248,8 +245,13 @@ public class MovimientoBean {
 			throw new ServiciosException("No se pudo obtener movimientos con id " + id.toString());
 		}
 	}
+
+
 	
  	public String add(String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, String nombreProducto, String nombreAlmacenamiento){
+ 		
+ 		// Requerimiento 7 Alta de Perdidas
+ 		
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Movimiento add ok: ", "Movimiento agregado correctamente");
 		String paginaDeRetorno = "mostrarMovimiento";
 		try{
@@ -265,13 +267,37 @@ public class MovimientoBean {
 				// si el movimiento es una Perdida por requerimeinto se controla que haya stock suficiente del productp para registrar la perdida
 				if (!productosEJBBean.StocKsuficienteDeProducto(cantidad, nombreProducto)){
 					message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento add Error: ", "Stock insuficinete de Producto para registrar la Perdida, por favor revise sus datos");
-			}
+				}
 			}else {
 				System.out.println("addMovimiento-descripcion " + descripcion);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	            Date Dfecha = sdf.parse(fecha);
-				Movimiento movimiento = new Movimiento(Dfecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProductosByNombre(nombreProducto).get(0), almacenamientosEJBBean.getAlmacenamientosByNombre(nombreProducto).get(0));
-				movimientosEJBBean.addMovimiento(movimiento);
+				if(tipoMov==tipoMovimiento.P) {
+
+					// Verificar que exista un Movimiento de ese producto a ese almacenamiento y que tenga cantidad suficiente para descontar la perdida
+					
+		            producto = productosEJBBean.getProductosByNombre(nombreProducto).get(0);
+					almacenamiento = almacenamientosEJBBean.getAlmacenamientosByNombre(nombreAlmacenamiento).get(0);
+
+					Movimiento movimientoAdescontar = new Movimiento();
+					movimientoAdescontar = getMovimientosProductoAlmacenamiento(producto, almacenamiento).get(0);
+					
+					if (movimientoAdescontar.getCantidad() >= cantidad) {
+						
+						// se devuelve volumen de espacio en el almacenamiento al regisrtar el alta de la perdida 
+						almacenamiento.setVolumen((int) Math.round(almacenamiento.getVolumen()+(producto.getVolumen()*cantidad)));
+						almacenamientosEJBBean.updateAlmacenamiento(almacenamiento);
+						
+						// se descuenta del stock del producto la cantidad de la perdida
+						producto.setStkTotal(producto.getStkTotal()-cantidad);
+						productosEJBBean.updateProducto(producto);
+						
+						// se registra el movimeinto de la perdida
+						Movimiento movimiento = new Movimiento(Dfecha, cantidad, descripcion, costo, tipoMov, producto, almacenamiento);
+						movimientosEJBBean.addMovimiento(movimiento);
+
+					}
+				}
 				}
 			FacesContext.getCurrentInstance().addMessage(null, message);
 			return paginaDeRetorno;
@@ -318,6 +344,9 @@ public class MovimientoBean {
 	
 	
 	public String delete(Long id){
+
+ 		// Requerimiento 7 Baja de Perdidas
+		
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Movimiento delete ok: ", "Movimiento borrado correctamente");
 		String paginaDeRetorno = "mostrarMovimiento";
 		try{
@@ -326,11 +355,20 @@ public class MovimientoBean {
 			}else {
 				if(tipoMov==tipoMovimiento.P) {
 					// si el movimiento es una Perdida por requerimiento se debe devolver la Cantidad del Producto que se encontraba en la Perdida al Almacenamiento. 
+
 					Movimiento movimiento = movimientosEJBBean.getMovimiento(id);
 					producto = movimiento.getProducto();
-					producto.setStkTotal(producto.getStkTotal()+movimiento.getCantidad());
+
+					// se descuenta del volumen disponible de espacio en el almacenamiento el regisrtado en la perdida 
+					almacenamiento.setVolumen((int) Math.round(almacenamiento.getVolumen()-(producto.getVolumen()*cantidad)));
+					almacenamientosEJBBean.updateAlmacenamiento(almacenamiento);
+					
+					// se vuelve a incorporar al stock del producto la cantidad de la perdida
+					producto.setStkTotal(producto.getStkTotal()+cantidad);
 					productosEJBBean.updateProducto(producto);
+					
 					}
+				// se elimina el registro del movimiento de la perdida
 				movimientosEJBBean.removeMovimiento(id);
 				}	
 			FacesContext.getCurrentInstance().addMessage(null, message);
@@ -382,6 +420,22 @@ public class MovimientoBean {
 		}
 	}
 
+	public List<Movimiento> getMovimientosProductoAlmacenamiento(Producto producto, Almacenamiento almacenamiento) throws ServiciosException{
+
+		try{
+			List<Movimiento> listaMovimientos = movimientosEJBBean.getMovimientosProductoAlmacenamiento(producto, almacenamiento); 
+			if ( listaMovimientos.isEmpty()) {
+				return null; // ("No existen movimientos de ese producto en ese almacenamiento")
+			} else {
+				return listaMovimientos;
+			}
+		}catch(PersistenceException e){
+			throw new ServiciosException("No se pudo obtener lista de movimientos");
+		}
+	}
+
+	
+	
 
 	
 	public String deleteClase(Movimiento m){
