@@ -7,6 +7,8 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.persistence.PersistenceException;
 
 import com.beans.IPerfilesRemote;
@@ -15,10 +17,8 @@ import com.entities.Perfil;
 import com.enumerated.tipoPerfil;
 import com.entities.Usuario;
 import com.exception.ServiciosException;
+
 import org.primefaces.context.RequestContext;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 
 @ManagedBean(name="usuarioB")
 @SessionScoped
@@ -39,8 +39,8 @@ public class UsuarioBean {
 	private String contrasena;
 	private String correo;
 	private Perfil perfil;
+	
 	private boolean loged;
-	private FacesMessage mensaje;
 	
 	public usuarioValor[] valorList;
 	
@@ -138,12 +138,13 @@ public class UsuarioBean {
 	
 
 	public String getAll() throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaUsuarios";
 		try{
 			List<Usuario> listaUsuarios = usuariosEJBBean.getAllUsuarios(); 
 			if ( listaUsuarios.isEmpty()) {
 				return null; // ("No existen usuarios")
 			} else {
-				return "mostrarListaUsuarios";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener lista de usuarios");
@@ -151,6 +152,7 @@ public class UsuarioBean {
 	}
 
 	public String getUsuariosBynomAcceso(String nomAcceso) throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaUsuarios";
 		try{
 			List<Usuario> listaUsuarios = usuariosEJBBean.getUsuariosBynomAcceso(nomAcceso); 
 			if ( listaUsuarios.isEmpty()) {
@@ -158,7 +160,7 @@ public class UsuarioBean {
 				return null; // ("No existen usuarios con nomAcceso " + nomAcceso")
 			} else {
 				this.loged=true;
-				return "mostrarListaUsuarios";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener usuario con nomAcceso " + nomAcceso);
@@ -166,13 +168,14 @@ public class UsuarioBean {
 	}
 
 	public String getUsuariosById(Long id) throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaUsuarios";
 		try{
 			Usuario usuario = usuariosEJBBean.getUsuario(id); 
 			
 			if ( usuario == null ) {
 				return null; // (""No existe usuario con id " + id.toString()")
 			} else {
-				return "mostrarListaUsuarios";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener usuarios con id " + id.toString());
@@ -180,37 +183,75 @@ public class UsuarioBean {
 	}
 	
 	public String add(String nombre, String apellido, String nomAcceso, String contrasena, String correo, String nombrePerfil){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario add ok: ", "Usuario agregado correctamente");
+		String paginaDeRetorno = "mostrarUsuario";
 		try{
-			System.out.println("addUsuario-nomAcceso " + nomAcceso);
-			Usuario usuario = new Usuario(nombre, apellido, nomAcceso, contrasena, correo, perfilesEJBBean.getPerfilesByNombre(nombrePerfil).get(0));
-			usuariosEJBBean.addUsuario(usuario);
-			return "mostrarUsuario";
+			if(nombre.isEmpty() || nombre.length()>50) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario add Error: ", "El Nombre debe ser no vacio y menor o igual a 50 caracteres");
+			}else if(apellido.isEmpty() || apellido.length()>50) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario add Error: ", "El Apellido debe ser no vacio y menor o igual a 50 caracteres");
+			}else if(nomAcceso.isEmpty() || nomAcceso.length()>20){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario add Error: ", "El nomAcceso debe ser no vacio y menor o igual a 20 caracteres");
+			}else if(getUsuariosBynomAcceso(nomAcceso)!=null){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario add Error: ", "El nomAcceso ya existe en la BD, ingrese otro nomAcceso");
+			}else if(contrasena.length()<8 || contrasena.length()>16){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario add Error: ", "La contraseña debe ser entre 8 y 16 caracteres");
+			}else if(correo.isEmpty() || correo.length()>50){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario add Error: ", "El correo debe ser no vacio y menor o igual a 50 caracteres");
+			}else {
+				System.out.println("addUsuario-nomAcceso " + nomAcceso);
+				Usuario usuario = new Usuario(nombre, apellido, nomAcceso, contrasena, correo, perfilesEJBBean.getPerfilesByNombre(nombrePerfil).get(0));
+				usuariosEJBBean.addUsuario(usuario);
+				}
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno;
 		}catch(Exception e){
 			return null;
 		}
 	}
 
 	public String update(Long id, String nombre, String apellido, String nomAcceso, String contrasena, String correo, Long idPerfil){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario update ok: ", "Usuario agregado correctamente");
+		String paginaDeRetorno = "mostrarUsuario";
 		try{
-            System.out.println("updateUsuario-nomAcceso " + nomAcceso);
-            Usuario usuario = usuariosEJBBean.getUsuario(id);
-            usuario.setNombre(nombre);
-            usuario.setApellido(apellido);
-            usuario.setNomAcceso(nomAcceso);
-            usuario.setContrasena(contrasena);
-            usuario.setCorreo(correo);
-            usuario.setPerfil(perfilesEJBBean.getPerfil(idPerfil));
-			usuariosEJBBean.updateUsuario(usuario);
-			return "mostrarUsuario";
+			if(nombre.isEmpty() || nombre.length()>50) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario update Error: ", "El Nombre debe ser no vacio y menor o igual a 50 caracteres");
+			}else if(apellido.isEmpty() || apellido.length()>50) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario update Error: ", "El Apellido debe ser no vacio y menor o igual a 50 caracteres");
+			}else if(nomAcceso.isEmpty() || nomAcceso.length()>20){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario update Error: ", "El nomAcceso debe ser no vacio y menor o igual a 20 caracteres");
+			}else if(getUsuariosBynomAcceso(nomAcceso)!=null){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario update Error: ", "El nomAcceso ya existe en la BD, ingrese otro nomAcceso");
+			}else if(contrasena.length()<8 || contrasena.length()>16){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario update Error: ", "La contraseña debe ser entre 8 y 16 caracteres");
+			}else if(correo.isEmpty() || correo.length()>50){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario update Error: ", "El correo debe ser no vacio y menor o igual a 50 caracteres");
+			}else {
+	            System.out.println("updateUsuario-nomAcceso " + nomAcceso);
+	            Usuario usuario = usuariosEJBBean.getUsuario(id);
+	            usuario.setNombre(nombre);
+	            usuario.setApellido(apellido);
+	            usuario.setNomAcceso(nomAcceso);
+	            usuario.setContrasena(contrasena);
+	            usuario.setCorreo(correo);
+	            usuario.setPerfil(perfilesEJBBean.getPerfil(idPerfil));
+				usuariosEJBBean.updateUsuario(usuario);
+				}
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno;
 		}catch(Exception e){
 			return null;
 		}
+		
 	}
 	
 	public String delete(Long id){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario del ok: ", "Usuario borrado correctamente");
+		String paginaDeRetorno = "mostrarUsuario"; // OJO CHEQUEAR ESTO ! SI TIENE DATOSPARA MOSTRAR !
 		try{
 			usuariosEJBBean.removeUsuario(id);
-			return null; /// ojo esto esta mal debe ir a pagina del menu
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno;
 		}catch(Exception e){
 			return null;
 		}

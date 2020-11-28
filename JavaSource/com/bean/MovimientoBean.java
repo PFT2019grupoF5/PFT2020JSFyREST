@@ -12,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.persistence.PersistenceException;
 
 import com.beans.IProductosRemote;
@@ -19,9 +20,12 @@ import com.beans.IAlmacenamientosRemote;
 import com.beans.IMovimientosRemote;
 import com.entities.Almacenamiento;
 import com.entities.Producto;
+import com.entities.Usuario;
 import com.entities.Movimiento;
 import com.enumerated.tipoMovimiento;
 import com.exception.ServiciosException;
+
+import org.primefaces.context.RequestContext;
 
 @ManagedBean(name="movimientoB")
 @SessionScoped
@@ -167,12 +171,13 @@ public class MovimientoBean {
 	
 
 	public String getAll() throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaMovimientos";
 		try{
 			List<Movimiento> listaMovimientos = movimientosEJBBean.getAllMovimientos(); 
 			if ( listaMovimientos.isEmpty()) {
 				return null; // ("No existen movimientos")
 			} else {
-				return "mostrarListaMovimientos";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener lista de movimientos");
@@ -180,12 +185,13 @@ public class MovimientoBean {
 	}
 
 	public String getMovimientosByDescripcion(String descripcion) throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaMovimientos";
 		try{
 			List<Movimiento> listaMovimientos = movimientosEJBBean.getMovimientosByDescripcion(descripcion); 
 			if ( listaMovimientos.isEmpty()) {
 				return null; // ("No existen movimientos con descripcion " + descripcion")
 			} else {
-				return "mostrarListaMovimientos";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener movimiento con descripcion " + descripcion);
@@ -197,9 +203,6 @@ public class MovimientoBean {
 	
 	public String getMovimientosEntreFechas(String fecini, String fecfin) throws ServiciosException{
 		try{
-			
-			
-            
 			try {
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("es", "ES"));
@@ -246,50 +249,98 @@ public class MovimientoBean {
 		}
 	}
 	
-	public String add(String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, String nombreProducto, String nombreAlmacenamiento){
+ 	public String add(String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, String nombreProducto, String nombreAlmacenamiento){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Movimiento add ok: ", "Movimiento agregado correctamente");
+		String paginaDeRetorno = "mostrarMovimiento";
 		try{
-			System.out.println("addMovimiento-descripcion " + descripcion);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date Dfecha = sdf.parse(fecha);
-			Movimiento movimiento = new Movimiento(Dfecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProductosByNombre(nombreProducto).get(0), almacenamientosEJBBean.getAlmacenamientosByNombre(nombreProducto).get(0));
-			movimientosEJBBean.addMovimiento(movimiento);
-			return "mostrarMovimiento";
+			if(fecha.isEmpty() || cantidad<=0 || descripcion.isEmpty() || costo<=0 || tipoMov.toString().isEmpty() || nombreProducto.isEmpty() || nombreAlmacenamiento.isEmpty()) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento add Error: ", "Es necesario ingresar todos los datos requeridos");
+			}else if(descripcion.length()>250) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento add Error: ", "Los datos ingresados, superan el largo permitido. Por favor revise sus datos");
+			}else if(productosEJBBean.getProductosByNombre(nombreProducto)!=null){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento add Error: ", "No se encontró el Producto en la BD. Por favor revise sus datos");
+			}else if(almacenamientosEJBBean.getAlmacenamientosByNombre(nombreAlmacenamiento)!=null){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento add Error: ", "No se encontró el Almacenamiento en la BD. Por favor revise sus datos");
+			}else if(tipoMov==tipoMovimiento.P) {
+				// si el movimiento es una Perdida por requerimeinto se controla que haya stock suficiente del productp para registrar la perdida
+				if (!productosEJBBean.StocKsuficienteDeProducto(cantidad, nombreProducto)){
+					message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento add Error: ", "Stock insuficinete de Producto para registrar la Perdida, por favor revise sus datos");
+			}
+			}else {
+				System.out.println("addMovimiento-descripcion " + descripcion);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	            Date Dfecha = sdf.parse(fecha);
+				Movimiento movimiento = new Movimiento(Dfecha, cantidad, descripcion, costo, tipoMov, productosEJBBean.getProductosByNombre(nombreProducto).get(0), almacenamientosEJBBean.getAlmacenamientosByNombre(nombreProducto).get(0));
+				movimientosEJBBean.addMovimiento(movimiento);
+				}
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno;
 		}catch(Exception e){
 			return null;
 		}
 	}
 
 	public String update(Long id, String fecha, int cantidad, String descripcion, double costo, tipoMovimiento tipoMov, Long idProducto, Long idAlmacenamiento){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Movimiento update ok: ", "Movimiento modificado correctamente");
+		String paginaDeRetorno = "mostrarMovimiento";
 		try{
-            System.out.println("updateMovimiento-descripcion " + descripcion);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date Dfecha = sdf.parse(fecha);
-            Movimiento movimiento = movimientosEJBBean.getMovimiento(id);
-            movimiento.setFecha(Dfecha);
-            movimiento.setCantidad(cantidad);
-            movimiento.setDescripcion(descripcion);
-            movimiento.setCosto(costo);
-            movimiento.setTipoMov(tipoMov);
-            movimiento.setProducto(productosEJBBean.getProducto(idProducto));
-            movimiento.setAlmacenamiento(almacenamientosEJBBean.getAlmacenamiento(idAlmacenamiento));
-			movimientosEJBBean.updateMovimiento(movimiento);
-			return "mostrarMovimiento";
+			if(fecha.isEmpty() || cantidad<=0 || descripcion.isEmpty() || costo<=0 || tipoMov.toString().isEmpty() || idProducto==0 || idAlmacenamiento==0) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento update Error: ", "Es necesario ingresar todos los datos requeridos");
+			}else if(descripcion.length()>250) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento update Error: ", "Los datos ingresados, superan el largo permitido. Por favor revise sus datos");
+			}else if(productosEJBBean.getProducto(idProducto)!=null){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento update Error: ", "No se encontró el Producto en la BD. Por favor revise sus datos");
+			}else if(almacenamientosEJBBean.getAlmacenamiento(idAlmacenamiento)!=null){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento update Error: ", "No se encontró el Almacenamiento en la BD. Por favor revise sus datos");
+			}else if(tipoMov==tipoMovimiento.P) {
+				// si el movimiento es una Perdida por requerimeinto no se permiten modificaciones, se debe dar de Baja la perdida e ingresar nuevamente. 
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento update Error: ", "No se permiten realizar Modificaciones de Perdidas. en caso de error se debe Eliminar e ingresar nuevamente la Perdida");
+			}else {
+	            System.out.println("updateMovimiento-descripcion " + descripcion);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	            Date Dfecha = sdf.parse(fecha);
+	            Movimiento movimiento = movimientosEJBBean.getMovimiento(id);
+	            movimiento.setFecha(Dfecha);
+	            movimiento.setCantidad(cantidad);
+	            movimiento.setDescripcion(descripcion);
+	            movimiento.setCosto(costo);
+	            movimiento.setTipoMov(tipoMov);
+	            movimiento.setProducto(productosEJBBean.getProducto(idProducto));
+	            movimiento.setAlmacenamiento(almacenamientosEJBBean.getAlmacenamiento(idAlmacenamiento));
+				movimientosEJBBean.updateMovimiento(movimiento);
+				}
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno;
 		}catch(Exception e){
 			return null;
 		}
 	}
-
 	
 	
 	public String delete(Long id){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Movimiento delete ok: ", "Movimiento borrado correctamente");
+		String paginaDeRetorno = "mostrarMovimiento";
 		try{
-			movimientosEJBBean.removeMovimiento(id);
-			return null; /// ojo esto esta mal debe ir a pagina del menu
+			if(id==0) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Movimiento delete Error: ", "Es necesario ingresar el id del mmovimiento a borrar");
+			}else {
+				if(tipoMov==tipoMovimiento.P) {
+					// si el movimiento es una Perdida por requerimiento se debe devolver la Cantidad del Producto que se encontraba en la Perdida al Almacenamiento. 
+					Movimiento movimiento = movimientosEJBBean.getMovimiento(id);
+					producto = movimiento.getProducto();
+					producto.setStkTotal(producto.getStkTotal()+movimiento.getCantidad());
+					productosEJBBean.updateProducto(producto);
+					}
+				movimientosEJBBean.removeMovimiento(id);
+				}	
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno; /// ojo esto esta mal debe ir a pagina del menu
 		}catch(Exception e){
 			return null;
 		}
 	}
 
+	
 	@PostConstruct
 	public void init() {
 		try {

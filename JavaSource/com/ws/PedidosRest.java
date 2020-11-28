@@ -15,7 +15,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 
 import com.beans.IPedidosRemote;
-import com.entities.Movimiento;
 import com.entities.Pedido;
 import com.exception.ServiciosException;
 

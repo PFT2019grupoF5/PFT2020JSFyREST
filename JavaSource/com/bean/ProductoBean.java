@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.PersistenceException;
 
 import com.beans.IProductosRemote;
@@ -19,6 +21,9 @@ import com.entities.Usuario;
 import com.entities.Producto;
 import com.enumerated.Segmentacion;
 import com.exception.ServiciosException;
+
+import org.primefaces.context.RequestContext;
+
 
 @ManagedBean(name="productoB")
 @SessionScoped
@@ -194,12 +199,13 @@ public class ProductoBean {
 	
 	
 	public String getAll() throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaProductos";
 		try{
 			List<Producto> listaProductos = productosEJBBean.getAllProductos(); 
 			if ( listaProductos.isEmpty()) {
 				return null; // ("No existen productos")
 			} else {
-				return "mostrarListaProductos";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener lista de productos");
@@ -208,12 +214,13 @@ public class ProductoBean {
 
 
 	public String getProductosByNombre(String nombre) throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaProductos";
 		try{
 			List<Producto> listaProductos = productosEJBBean.getProductosByNombre(nombre); 
 			if ( listaProductos.isEmpty()) {
 				return null; // ("No existen productos con nombre " + nombre")
 			} else {
-				return "mostrarListaProductos";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener almacenamiento con nombre " + nombre);
@@ -221,12 +228,13 @@ public class ProductoBean {
 	}
 
 	public String getProductosById(Long id) throws ServiciosException{
+		String paginaDeRetorno = "mostrarListaProductos";
 		try{
 			Producto producto = productosEJBBean.getProducto(id); 
 			if ( producto == null ) {
-				return null; // (""No existe almacenamiento con id " + id.toString()")
+				return null; // (""No existe producto con id " + id.toString()")
 			} else {
-				return "mostrarListaProductos";
+				return paginaDeRetorno;
 			}
 		}catch(PersistenceException e){
 			throw new ServiciosException("No se pudo obtener productos con id " + id.toString());
@@ -234,58 +242,142 @@ public class ProductoBean {
 }
 	
 	public String add(String nombre, String lote, double precio, String felab, String fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, long idUsuario, long idFamilia) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto add ok: ", "Producto agregado correctamente");
+		String paginaDeRetorno = "mostrarProducto";
 		try{
-			System.out.println("addProducto-nombre " + nombre);		
-			System.out.println("addProducto-nombre " + nombre + " " + lote + " " +  precio + " " + felab + " " + fven + " " + peso + " " + volumen + " " + estiba + " " + stkMin + " " + stkTotal + " " + segmentac + " " + idUsuario  + " " + idFamilia);			
-
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date Dfelab = sdf.parse(felab);
-            Date Dfven = sdf.parse(fven);
-			Producto producto = new Producto(nombre, lote, precio, Dfelab, Dfven, peso, volumen, estiba, stkMin, stkTotal, segmentac, usuariosEJBBean.getUsuario(idUsuario) , familiasEJBBean.getFamilia(idFamilia));
-			productosEJBBean.addProducto(producto);
-			return "mostrarProducto";
+			if(nombre.isEmpty() || lote.isEmpty() || felab.isEmpty() || fven.isEmpty() ) {
+				// los demas valores se controlan a momento de data entry
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "Es necesario ingresar todos los datos requeridos");
+			}else if(nombre.length()>50) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "Los datos ingresados, superan el largo permitido. Por favor reise sus datos.");
+			}else if(lote.length()>10){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "El lote debe ser de largo menor o igual a 10 caracteres");
+			}else if(peso<=0){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "El peso no debe ser menor o igual a cero");
+			}else if(volumen<=0){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "El volumen no debe ser menor o igual a cero");
+			}else if(stkTotal<0){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "El stock Total no debe ser menor que cero");
+			}else if(stkMin<0){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "El stock Minimo no debe ser menor que cero");
+			}else if(getProductosByNombre(nombre)!=null){
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "Producto ya existente, por favor revise sus datos.");
+			}else {
+        			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        			Date Dfelab = sdf.parse(felab);
+        			Date Dfven = sdf.parse(fven);
+        			if(Dfelab.compareTo(Dfven)>0){
+        				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "La fecha de Fabricacion no puede ser posterior a la de Vencimiento");
+                   	}
+        			else { 
+        			System.out.println("addProducto-nombre " + nombre);		
+        			System.out.println("addProducto-nombre " + nombre + " " + lote + " " +  precio + " " + felab + " " + fven + " " + peso + " " + volumen + " " + estiba + " " + stkMin + " " + stkTotal + " " + segmentac + " " + idUsuario  + " " + idFamilia);			
+        			Producto producto = new Producto(nombre, lote, precio, Dfelab, Dfven, peso, volumen, estiba, stkMin, stkTotal, segmentac, usuariosEJBBean.getUsuario(idUsuario) , familiasEJBBean.getFamilia(idFamilia));
+        			productosEJBBean.addProducto(producto);
+        			}
+			}
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno;
 		}catch(Exception e){
-			return null;
-		}
+        	return null;
+        }
+		
 	}
 
-	public String update(Long id, String nombre, String lote, double precio, String felab, String fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, Long idUsuario, Long idFamilia){
-		try{
-            System.out.println("updateProducto-nombre " + nombre);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date Dfelab = sdf.parse(felab);
-			Date Dfven = sdf.parse(fven);
-            Producto producto = productosEJBBean.getProducto(id);
-            producto.setNombre(nombre);
-            producto.setLote(lote);
-            producto.setPrecio(precio);
-            producto.setFelab(Dfelab);
-            producto.setFven(Dfven);
-            producto.setPeso(peso);
-            producto.setVolumen(volumen);
-            producto.setEstiba(estiba);
-            producto.setStkMin(stkMin);
-            producto.setStkTotal(stkTotal);
-            producto.setSegmentac(segmentac);
-            producto.setUsuario(usuariosEJBBean.getUsuario(idUsuario));
-            producto.setFamilia(familiasEJBBean.getFamilia(idFamilia));
-            productosEJBBean.updateProducto(producto);
-			return "mostrarProducto";
-		}catch(Exception e){
+	public String update(Long id, String nombre, String lote, double precio, String felab, String fven, double peso, double volumen, int estiba, double stkMin, double stkTotal, Segmentacion segmentac, Long idUsuario, Long idFamilia) {
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto update ok: ",	"Producto modificado correctamente");
+		String paginaDeRetorno = "mostrarProducto";
+		try {
+			if (getProductosById(id) == null) {
+				// Se controla que el producto exista para poder modificarlo.
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "Producto no existe en la BD");
+			} else if (nombre.isEmpty() || lote.isEmpty() || felab.isEmpty() || fven.isEmpty()) {
+				// los demas valores se controlan a momento de data entry
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "Es necesario ingresar todos los datos requeridos");
+			} else if (lote.length() > 10) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "El lote debe ser de largo menor o igual a 10 caracteres");
+			} else if (peso <= 0) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "El peso no debe ser menor o igual a cero");
+			} else if (volumen <= 0) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "El volumen no debe ser menor o igual a cero");
+			} else if (stkTotal < 0) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "El stock Total no debe ser menor que cero");
+			} else if (stkMin < 0) {
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "El stock Minimo no debe ser menor que cero");
+			} else {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date Dfelab = sdf.parse(felab);
+				Date Dfven = sdf.parse(fven);
+				if (Dfelab.compareTo(Dfven) > 0) {
+					message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "La fecha de Fabricacion no puede ser posterior a la de Vencimiento");
+				} else {
+					System.out.println("updateProducto-nombre " + nombre);
+					// se traen datos del producto
+					Producto producto = productosEJBBean.getProducto(id);
+					// Se modifican campos con datos pasados por parametros
+					
+					// No se permitirá cambiar el Codigo ni la Descripcion del producto
+					// producto.setNombre(nombre);
+					
+					producto.setLote(lote);
+					producto.setPrecio(precio);
+					producto.setFelab(Dfelab);
+					producto.setFven(Dfven);
+					producto.setPeso(peso);
+					producto.setVolumen(volumen);
+					producto.setEstiba(estiba);
+					producto.setStkMin(stkMin);
+					producto.setStkTotal(stkTotal);
+					producto.setSegmentac(segmentac);
+					producto.setUsuario(usuariosEJBBean.getUsuario(idUsuario));
+					producto.setFamilia(familiasEJBBean.getFamilia(idFamilia));
+					productosEJBBean.updateProducto(producto);
+				}
+			}
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno;
+		} catch (Exception e) {
 			return null;
 		}
+
 	}
 	
 	public String delete(Long id){
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto delete ok: ", "Producto borrado correctamente");
+		String paginaDeRetorno = "mostrarProducto"; // chequear si es ok la pagina de retorno!!! o debe volver a menu principal index
 		try{
-			productosEJBBean.removeProducto(id);
-			return "mostrarProducto"; /// ojo esto esta mal debe ir a otra pagina del menu, no puede mostrar el producto que borro
+			if(getProductosById(id)==null) {
+				// Se controla que el producto exista para poder borrarlo.
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto update Error: ", "Producto no existe en la BD");
+			}
+			//Producto no debe estar ingresado en Pedidos o en Productos_Almacenamientos ni se haya registrado una Perdida )
+			else if( getProductosById(id)==null) { 
+				message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Producto add Error: ", "Producto no sepuede Eliminar porque existe en X, eliminelo previamente de X para luego Eliminar el mismo");
+				// que es X ????
+			}else {
+					productosEJBBean.removeProducto(id);
+			}
+			FacesContext.getCurrentInstance().addMessage(null, message);
+			return paginaDeRetorno; /// ojo esto esta mal debe ir a otra pagina del menu, no puede mostrar el producto que borro
 		}catch(Exception e){
 			return null;
 		}
 	}
 
+	
+	
+	public Boolean StocKsuficienteDeProducto(int cantidad, String nombreProducto) throws ServiciosException{
+		try{
+			List<Producto> listaProductos = productosEJBBean.getProductosByNombre(nombreProducto); 
+			if ( listaProductos.isEmpty()) {
+				return null; // ("No existen productos con nombre " + nombre")
+			} else {
+				return listaProductos.get(0).getStkTotal() >= cantidad;
+			}
+		}catch(PersistenceException e){
+			throw new ServiciosException("No se pudo obtener el producto con nombre " + nombreProducto);
+		}
+	}
 	
 	
 
