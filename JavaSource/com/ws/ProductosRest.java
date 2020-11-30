@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 
 import com.beans.IProductosRemote;
+
 import com.entities.Producto;
 import com.exception.ServiciosException;
 
@@ -24,7 +25,7 @@ public class ProductosRest {
 
 	@EJB
 	private IProductosRemote productosBeans;
-
+	
 	@GET
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,12 +55,12 @@ public class ProductosRest {
     @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     public Producto addProducto(Producto producto) throws ServiciosException{
-        try{
+    	try{
             System.out.println("addProducto-nombre " + producto.getNombre());    
             System.out.println("addProducto-Felab  " + producto.getFelab().toString());    
             System.out.println("addProducto-Fven   " + producto.getFven().toString());    
             productosBeans.addProducto(producto);
-			return producto;
+            return producto;
         }catch(PersistenceException e){
             e.printStackTrace();
             throw new ServiciosException("No se pudo agregar producto");
@@ -69,7 +70,7 @@ public class ProductosRest {
     @PUT
     @Path("/update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-      public Producto updateProducto(@PathParam("id") Long id, Producto producto) throws ServiciosException{
+    public Producto updateProducto(@PathParam("id") Long id, Producto producto) throws ServiciosException{
         try{
             System.out.println("updateProducto-nombre " + producto.getNombre());
             producto.setId(id);
@@ -86,9 +87,9 @@ public class ProductosRest {
     @Path("/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Producto deleteProducto(@PathParam("id") Long id) throws ServiciosException {
-		try{
+    	try{
 			System.out.println("deleteProducto-id " + id.toString());
-			Producto producto = productosBeans.getProducto(id);
+		    Producto producto = productosBeans.getProducto(id);
 			productosBeans.removeProducto(id);
 			return producto;
 		}catch(PersistenceException e){

@@ -14,11 +14,12 @@
 			<h:form id="loginForm">
 			    <h:panelGrid columns="3">
 			      Usuario:
-			      <h:inputText id="usuario" value="#{usuarioB.nomAcceso}" required="true" label="usuario" styleClass="form-control"/>
+			      <h:inputText id="usuario" value="#{usuarioB.nomAcceso}" required="true" label="usuario" styleClass="form-control" minlength="1" maxlength="20"/>
 			      <h:message for="usuario" styleClass="text-danger"/>
 			      Contraseña:
-			      <h:inputSecret id="contraseña" value="#{usuarioB.contrasena}" required="true" label="contraseña" styleClass="form-control"/>
+			      <h:inputSecret id="contraseña" value="#{usuarioB.contrasena}" required="true" label="contraseña" styleClass="form-control" minlength="8" maxlength="16" pattern="[a-zA-Z0-9]\s"/>
 			      <h:message for="contraseña" styleClass="text-danger"/>
+
 	  	
 	  			 <f:facet name="footer">
 	  				<p:commandButton value="LogIn" 

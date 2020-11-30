@@ -70,7 +70,8 @@ public class AlmacenamientosRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Almacenamiento updateAlmacenamiento(@PathParam("id") Long id, Almacenamiento almacenamiento) throws ServiciosException{
         try{
-            System.out.println("updateAlmacenamiento-nombre " + almacenamiento.getNombre() );    
+            System.out.println("updateAlmacenamiento-nombre " + almacenamiento.getNombre() );
+            almacenamiento.setId(id);
 			almacenamientosBeans.updateAlmacenamiento(almacenamiento);
             return almacenamiento;
         }catch(PersistenceException e){

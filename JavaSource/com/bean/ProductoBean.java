@@ -275,6 +275,7 @@ public class ProductoBean {
         			productosEJBBean.addProducto(producto);
         			}
 			}
+
 			FacesContext.getCurrentInstance().addMessage(null, message);
 			return paginaDeRetorno;
 		}catch(Exception e){
